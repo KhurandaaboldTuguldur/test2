@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <title>Content Manager</title>
+
+    <!-- ✅ Netlify Identity Widget -->
     <script src="https://identity-js.netlify.com/v1/netlify-identity-widget.js"></script>
 
+    <!-- ✅ config.yml файлыг зааж өгнө -->
+    <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
   </head>
   <body>
+    <!-- ✅ Netlify CMS script -->
     <script src="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-
   </body>
 </html>
