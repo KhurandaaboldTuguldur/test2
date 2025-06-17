@@ -1,17 +1,31 @@
-backend:
-  name: git-gateway
-  branch: main
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Content Manager</title>
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+    <!-- Netlify Identity script -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-collections:
-  - name: "news"
-    label: "Мэдээнүүд"
-    folder: "news"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Гарчиг", name: "title", widget: "string" }
-      - { label: "Огноо", name: "date", widget: "datetime" }
-      - { label: "Агуулга", name: "body", widget: "markdown" }
+    <!-- config.yml файлыг зааж өгнө -->
+    <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
+  </head>
+  <body>
+    <!-- Netlify CMS script -->
+    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+    <!-- Identity init and auto-login redirect -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+        window.netlifyIdentity.init();
+      }
+    </script>
+  </body>
+</html>
