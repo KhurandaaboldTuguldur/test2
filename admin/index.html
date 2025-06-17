@@ -3,10 +3,29 @@
   <head>
     <meta charset="utf-8" />
     <title>Content Manager</title>
+    
+    <!-- ✅ Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- ✅ config.yml заасан -->
     <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
   </head>
   <body>
+    <!-- ✅ CMS script -->
     <script src="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+    <!-- ✅ Identity init скрипт -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+        window.netlifyIdentity.init();
+      }
+    </script>
   </body>
 </html>
