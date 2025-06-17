@@ -14,7 +14,7 @@
     <!-- ✅ CMS script -->
     <script src="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 
-    <!-- ✅ Identity init скрипт -->
+    <!-- ✅ Identity init script зөвхөн энд -->
     <script>
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", (user) => {
@@ -28,17 +28,4 @@
       }
     </script>
   </body>
-  <script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", (user) => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-    window.netlifyIdentity.init();
-  }
-</script>
-
 </html>
