@@ -2,18 +2,18 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "images/uploads"
+media_folder: "images/uploads" # зураг хадгалах байрлал
 public_folder: "/images/uploads"
 
 collections:
   - name: "posts"
-    label: "Blog Posts"
+    label: "Нийтлэлүүд"
     folder: "posts"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime" }
-      - { label: "Image", name: "image", widget: "image" }
-      - { label: "Excerpt", name: "excerpt", widget: "text" }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - {label: "Гарчиг", name: "title", widget: "string"}
+      - {label: "Огноо", name: "date", widget: "datetime"}
+      - {label: "Тайлбар", name: "description", widget: "text"}
+      - {label: "Зураг", name: "thumbnail", widget: "image"}
+      - {label: "Агуулга", name: "body", widget: "markdown"}
