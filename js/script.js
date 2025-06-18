@@ -10,7 +10,7 @@ fetch('/posts/index.json') // JSON файлд бүх markdown жагсаалт �
           <a href="single-blog.html?slug=${post.slug}">
             <img src="${post.thumbnail}" alt="">
             <h4>${post.title}</h4>
-            <p>${post.excerpt}</p>
+            <p>${post.description}</p>
           </a>
         </div>
       `;
