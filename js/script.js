@@ -1,10 +1,12 @@
 $(document).ready(function () {
   "use strict";
 
-  // Хугацаа автоматаар шинэчлэх
-  document.getElementById("copyrightYear").innerHTML = (new Date).getFullYear();
+  // ⏳ Оныг автоматаар бичих
+  const year = new Date().getFullYear();
+  const copyright = document.getElementById("copyrightYear");
+  if (copyright) copyright.innerHTML = year;
 
-  // Slider ба scroll effect
+  // 🌀 Slick Slider
   $(".widget-slider").slick({
     dots: false,
     infinite: true,
@@ -19,23 +21,29 @@ $(document).ready(function () {
     ]
   });
 
+  // 📌 Scroll үед navbar style өөрчлөгдөх
   $(window).on("scroll", function () {
-    $(window).scrollTop() ? $("nav").addClass("nav-bg") : $("nav").removeClass("nav-bg");
+    $(window).scrollTop()
+      ? $("nav").addClass("nav-bg")
+      : $("nav").removeClass("nav-bg");
   });
 
-  // ➕ Pagination тохиргоо
+  // 🔁 Pagination тохиргоо
   const postsPerPage = 5;
   let currentPage = 1;
   let postsData = [];
 
-  // DOM элементүүд
-  const articleList = document.getElementById('articles-list');
-  const trendingList = document.getElementById('trending-posts');
-  const paginationInfo = document.getElementById('pagination-info');
-  const prevBtn = document.getElementById('prevPage');
-  const nextBtn = document.getElementById('nextPage');
+  // 🧱 DOM элементүүд
+  const articleList = document.getElementById("articles-list");
+  const trendingList = document.getElementById("trending-posts");
+  const paginationInfo = document.getElementById("pagination-info");
+  const prevBtn = document.getElementById("prevPage");
+  const nextBtn = document.getElementById("nextPage");
 
+  // 🧩 Постуудыг render хийх
   function renderPosts(page) {
+    if (!articleList || !trendingList) return;
+
     articleList.innerHTML = "";
     trendingList.innerHTML = "";
 
@@ -53,16 +61,20 @@ $(document).ready(function () {
           </a>
         </div>
       `;
-      articleList.insertAdjacentHTML('beforeend', html);
-      if (i < 3) trendingList.insertAdjacentHTML('beforeend', html);
+      articleList.insertAdjacentHTML("beforeend", html);
+      if (i < 3) trendingList.insertAdjacentHTML("beforeend", html);
     });
 
+    // Pagination товчнуудын мэдээлэл
     const totalPages = Math.ceil(postsData.length / postsPerPage);
-    paginationInfo.innerText = `Page ${currentPage} of ${totalPages}`;
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
+    if (paginationInfo) {
+      paginationInfo.innerText = `Page ${currentPage} of ${totalPages}`;
+    }
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
   }
 
+  // ➕ Page солих
   function changePage(offset) {
     const totalPages = Math.ceil(postsData.length / postsPerPage);
     const newPage = currentPage + offset;
@@ -72,19 +84,32 @@ $(document).ready(function () {
     }
   }
 
-  // Fetch JSON
-  fetch('/posts/index.json')
-    .then(res => res.json())
-    .then(data => {
-      postsData = data;
+  // 📦 JSON ачаалах
+  fetch("/posts/index.json")
+    .then((res) => res.json())
+    .then((data) => {
+      // Array эсвэл { posts: [...] } structure-г шалгах
+      postsData = Array.isArray(data) ? data : data.posts || [];
+
+      if (!postsData.length) {
+        articleList.innerHTML =
+          "<p>Мэдээлэл олдсонгүй. JSON файл хоосон байж болзошгүй.</p>";
+        return;
+      }
+
       renderPosts(currentPage);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("❗ JSON load error:", error);
-      articleList.innerHTML = `<p style="color:red">Мэдээ ачааллаж чадсангүй. JSON холбоосыг шалгана уу.</p>`;
+      if (articleList) {
+        articleList.innerHTML = `
+          <p style="color:red">Мэдээ ачааллаж чадсангүй. <br>
+          /posts/index.json зам, slug эсвэл build script-ээ шалгана уу.</p>
+        `;
+      }
     });
 
-  // Pagination товч event
-  prevBtn.addEventListener('click', () => changePage(-1));
-  nextBtn.addEventListener('click', () => changePage(1));
+  // 🔘 Pagination товч event
+  if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
+  if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
