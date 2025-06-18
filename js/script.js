@@ -1,5 +1,5 @@
 $(document).ready(function(){"use strict";document.getElementById("copyrightYear").innerHTML=(new Date).getFullYear(),$(".widget-slider").slick({dots:!1,infinite:!0,speed:300,slidesToShow:1,slidesToScroll:1,arrows:!0,autoplay:!0,responsive:[{breakpoint:992,settings:{slidesToShow:1,slidesToScroll:1}},{breakpoint:768,settings:{slidesToShow:1,slidesToScroll:1}}]}),$(window).on("scroll",function(){$(window).scrollTop()?$("nav").addClass("nav-bg"):$("nav").removeClass("nav-bg")})});
-fetch('/posts/index.json') // JSON файлд бүх markdown жагсаалт байна
+fetch('/posts/index.json')
   .then(res => res.json())
   .then(posts => {
     const articleList = document.getElementById('articles-list');
@@ -17,4 +17,5 @@ fetch('/posts/index.json') // JSON файлд бүх markdown жагсаалт �
       articleList.innerHTML += html;
       if (i < 3) trendingList.innerHTML += html;
     });
-  });
+  })
+  .catch(error => console.error("❗ JSON load error:", error)); // ← ЭНЭ энд нэмэгдэнэ
