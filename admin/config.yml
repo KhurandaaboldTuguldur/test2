@@ -2,13 +2,18 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "images/uploads"
+media_folder: "images/uploads"         # зураг хадгалах газар
 public_folder: "/images/uploads"
 
+media_library:
+  name: "uploadcare"
+  config:
+    publicKey: "demopublickey"         # uploadcare ашиглахгүй бол энэ хэсгийг устгаж болно
+
 collections:
-  - name: "news"
+  - name: "news"                       # фолдерын нэртэй адилхан байх
     label: "Мэдээнүүд"
-    folder: "posts"
+    folder: "posts"                     # ✳️ GitHub дээрх хавтас (байх ёстой!)
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
