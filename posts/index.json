@@ -1,8 +1,9 @@
 [
   {
-    "slug": "2024-06-16-news",
-    "title": "Мэдээний гарчиг",
-    "image": "images/blog/blog-thum-1.png",
-    "excerpt": "Энэ бол танилцуулга хэсэг..."
+    "title": "AI News",
+    "date": "2025-06-18",
+    "description": "Amazon CEO expects fewer office jobs due to AI",
+    "thumbnail": "images/uploads/amazon.jpg",
+    "slug": "2025-06-18-amazon-ai-impact"
   }
 ]
