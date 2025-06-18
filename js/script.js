@@ -1,4 +1,4 @@
-fetch('/posts')
+fetch('/posts/index.json')
   .then(response => response.text())
   .then(text => {
     const parser = new DOMParser();
