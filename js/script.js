@@ -1,12 +1,12 @@
 $(document).ready(function () {
   "use strict";
 
-  // ⏳ Оныг автоматаар бичих
+  // Оныг автоматаар бичих
   const year = new Date().getFullYear();
-  const copyright = document.getElementById("copyrightYear");
-  if (copyright) copyright.innerHTML = year;
+  const copyrightEl = document.getElementById("copyrightYear");
+  if (copyrightEl) copyrightEl.textContent = year;
 
-  // 🌀 Slick Slider
+  // Slick slider
   $(".widget-slider").slick({
     dots: false,
     infinite: true,
@@ -21,26 +21,23 @@ $(document).ready(function () {
     ]
   });
 
-  // 📌 Scroll үед navbar style өөрчлөгдөх
+  // Scroll → navbar background toggle
   $(window).on("scroll", function () {
-    $(window).scrollTop()
-      ? $("nav").addClass("nav-bg")
-      : $("nav").removeClass("nav-bg");
+    $("nav").toggleClass("nav-bg", $(this).scrollTop() > 0);
   });
 
-  // 🔁 Pagination тохиргоо
+  // Paging setup
   const postsPerPage = 5;
   let currentPage = 1;
   let postsData = [];
 
-  // 🧱 DOM элементүүд
+  // DOM elements
   const articleList = document.getElementById("articles-list");
   const trendingList = document.getElementById("trending-posts");
   const paginationInfo = document.getElementById("pagination-info");
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
 
-  // 🧩 Постуудыг render хийх
   function renderPosts(page) {
     if (!articleList || !trendingList) return;
 
@@ -49,9 +46,9 @@ $(document).ready(function () {
 
     const start = (page - 1) * postsPerPage;
     const end = start + postsPerPage;
-    const visiblePosts = postsData.slice(start, end);
+    const visible = postsData.slice(start, end);
 
-    visiblePosts.forEach((post, i) => {
+    visible.forEach((post, i) => {
       const html = `
         <div class="col-lg-4 blog-post">
           <a href="single-blog.html?slug=${post.slug}">
@@ -65,16 +62,12 @@ $(document).ready(function () {
       if (i < 3) trendingList.insertAdjacentHTML("beforeend", html);
     });
 
-    // Pagination товчнуудын мэдээлэл
     const totalPages = Math.ceil(postsData.length / postsPerPage);
-    if (paginationInfo) {
-      paginationInfo.innerText = `Page ${currentPage} of ${totalPages}`;
-    }
+    if (paginationInfo) paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
     if (prevBtn) prevBtn.disabled = currentPage === 1;
     if (nextBtn) nextBtn.disabled = currentPage === totalPages;
   }
 
-  // ➕ Page солих
   function changePage(offset) {
     const totalPages = Math.ceil(postsData.length / postsPerPage);
     const newPage = currentPage + offset;
@@ -84,32 +77,28 @@ $(document).ready(function () {
     }
   }
 
-  // 📦 JSON ачаалах
-  fetch("/posts/index.json")
-    .then((res) => res.json())
+  // JSON data fetch
+  fetch("posts/index.json")
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
     .then((data) => {
-      // Array эсвэл { posts: [...] } structure-г шалгах
       postsData = Array.isArray(data) ? data : data.posts || [];
-
       if (!postsData.length) {
-        articleList.innerHTML =
-          "<p>Мэдээлэл олдсонгүй. JSON файл хоосон байж болзошгүй.</p>";
+        if (articleList)
+          articleList.innerHTML = `<p>⚠️ Мэдээлэл олдсонгүй. JSON файл хоосон байна уу?</p>`;
         return;
       }
-
       renderPosts(currentPage);
     })
-    .catch((error) => {
-      console.error("❗ JSON load error:", error);
-      if (articleList) {
-        articleList.innerHTML = `
-          <p style="color:red">Мэдээ ачааллаж чадсангүй. <br>
-          /posts/index.json зам, slug эсвэл build script-ээ шалгана уу.</p>
-        `;
-      }
+    .catch((err) => {
+      console.error("❗ JSON load error:", err);
+      if (articleList)
+        articleList.innerHTML = `<p style="color:red">Мэдээ ачааллаж чадсангүй.<br>JSON зам эсвэл build script-ээ шалгана уу.</p>`;
     });
 
-  // 🔘 Pagination товч event
+  // Pagination button events
   if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });

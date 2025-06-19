@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "generate": "node generate-index.js",
+    "build": "npm run generate && vite build"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}
