@@ -1,12 +1,12 @@
 $(document).ready(function () {
   "use strict";
 
-  // ⏳ Оныг автоматаар бичих
+  // ⏳ 자동 연도 입력
   const year = new Date().getFullYear();
   const copyrightEl = document.getElementById("copyrightYear");
   if (copyrightEl) copyrightEl.textContent = year;
 
-  // 🌀 Slick Slider
+  // 🌀 Slick 슬라이더
   $(".widget-slider").slick({
     dots: false,
     infinite: true,
@@ -21,24 +21,24 @@ $(document).ready(function () {
     ]
   });
 
-  // 📌 Scroll үед navbar background өөрчлөх
+  // 📌 스크롤 시 navbar 배경 추가
   $(window).on("scroll", function () {
     $("nav").toggleClass("nav-bg", $(this).scrollTop() > 0);
   });
 
-  // 🔁 Pagination тохиргоо
+  // 📄 Pagination 설정
   const postsPerPage = 5;
   let currentPage = 1;
   let postsData = [];
 
-  // 🧱 DOM элементүүд
+  // 🧱 DOM 요소 캐시
   const articleList = document.getElementById("articles-list");
   const trendingList = document.getElementById("trending-posts");
   const paginationInfo = document.getElementById("pagination-info");
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
 
-  // 🧩 Постыг илүү гоё card байдлаар render хийх
+  // 🧩 블로그 카드 HTML 생성 함수
   function createBlogCard(post) {
     return `
       <div class="col-lg-4">
@@ -49,14 +49,14 @@ $(document).ready(function () {
           <div class="content-box">
             <h3>${post.title}</h3>
             <p>${post.description}</p>
-            <span class="read-more">Дэлгэрэнгүй →</span>
+            <span class="read-more">자세히 보기 →</span>
           </div>
         </a>
       </div>
     `;
   }
 
-  // 🔘 Постуудыг render хийх
+  // 🔁 포스트 렌더링
   function renderPosts(page) {
     if (!articleList || !trendingList) return;
 
@@ -68,9 +68,9 @@ $(document).ready(function () {
     const visible = postsData.slice(start, end);
 
     visible.forEach((post, index) => {
-      const html = createBlogCard(post);
-      articleList.insertAdjacentHTML("beforeend", html);
-      if (index < 3) trendingList.insertAdjacentHTML("beforeend", html);
+      const card = createBlogCard(post);
+      articleList.insertAdjacentHTML("beforeend", card);
+      if (index < 3) trendingList.insertAdjacentHTML("beforeend", card);
     });
 
     const totalPages = Math.ceil(postsData.length / postsPerPage);
@@ -79,7 +79,7 @@ $(document).ready(function () {
     if (nextBtn) nextBtn.disabled = currentPage === totalPages;
   }
 
-  // ➕ Page солих
+  // ➕ 페이지 이동
   function changePage(offset) {
     const totalPages = Math.ceil(postsData.length / postsPerPage);
     const newPage = currentPage + offset;
@@ -89,7 +89,7 @@ $(document).ready(function () {
     }
   }
 
-  // 📦 JSON ачаалах
+  // 📦 JSON 데이터 로딩
   fetch("posts/index.json")
     .then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -100,19 +100,19 @@ $(document).ready(function () {
 
       if (!postsData.length) {
         if (articleList)
-          articleList.innerHTML = `<p>⚠️ Мэдээлэл олдсонгүй. JSON файл хоосон байна уу?</p>`;
+          articleList.innerHTML = `<p>⚠️ 게시물이 없습니다. JSON 파일을 확인하세요.</p>`;
         return;
       }
 
       renderPosts(currentPage);
     })
     .catch((error) => {
-      console.error("❗ JSON load error:", error);
+      console.error("❗ JSON 로딩 오류:", error);
       if (articleList)
-        articleList.innerHTML = `<p style="color:red">Мэдээ ачааллаж чадсангүй.<br>JSON зам эсвэл build script-ээ шалгана уу.</p>`;
+        articleList.innerHTML = `<p style="color:red">게시물 불러오기 실패<br>index.json 경로 또는 빌드 스크립트를 확인하세요.</p>`;
     });
 
-  // 🔘 Pagination товч event
+  // 🔘 페이지 버튼 이벤트
   if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
