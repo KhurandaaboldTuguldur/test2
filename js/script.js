@@ -1,12 +1,12 @@
 $(document).ready(function () {
   "use strict";
 
-  // Оныг автоматаар бичих
+  // ⏳ Оныг автоматаар бичих
   const year = new Date().getFullYear();
   const copyrightEl = document.getElementById("copyrightYear");
   if (copyrightEl) copyrightEl.textContent = year;
 
-  // Slick slider
+  // 🌀 Slick Slider
   $(".widget-slider").slick({
     dots: false,
     infinite: true,
@@ -21,23 +21,42 @@ $(document).ready(function () {
     ]
   });
 
-  // Scroll → navbar background toggle
+  // 📌 Scroll үед navbar background өөрчлөх
   $(window).on("scroll", function () {
     $("nav").toggleClass("nav-bg", $(this).scrollTop() > 0);
   });
 
-  // Paging setup
+  // 🔁 Pagination тохиргоо
   const postsPerPage = 5;
   let currentPage = 1;
   let postsData = [];
 
-  // DOM elements
+  // 🧱 DOM элементүүд
   const articleList = document.getElementById("articles-list");
   const trendingList = document.getElementById("trending-posts");
   const paginationInfo = document.getElementById("pagination-info");
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
 
+  // 🧩 Постыг илүү гоё card байдлаар render хийх
+  function createBlogCard(post) {
+    return `
+      <div class="col-lg-4">
+        <a class="blog-card" href="single-blog.html?slug=${post.slug}">
+          <div class="img-box">
+            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+          </div>
+          <div class="content-box">
+            <h3>${post.title}</h3>
+            <p>${post.description}</p>
+            <span class="read-more">Дэлгэрэнгүй →</span>
+          </div>
+        </a>
+      </div>
+    `;
+  }
+
+  // 🔘 Постуудыг render хийх
   function renderPosts(page) {
     if (!articleList || !trendingList) return;
 
@@ -48,18 +67,10 @@ $(document).ready(function () {
     const end = start + postsPerPage;
     const visible = postsData.slice(start, end);
 
-    visible.forEach((post, i) => {
-      const html = `
-        <div class="col-lg-4 blog-post">
-          <a href="single-blog.html?slug=${post.slug}">
-            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
-            <h4>${post.title}</h4>
-            <p>${post.description}</p>
-          </a>
-        </div>
-      `;
+    visible.forEach((post, index) => {
+      const html = createBlogCard(post);
       articleList.insertAdjacentHTML("beforeend", html);
-      if (i < 3) trendingList.insertAdjacentHTML("beforeend", html);
+      if (index < 3) trendingList.insertAdjacentHTML("beforeend", html);
     });
 
     const totalPages = Math.ceil(postsData.length / postsPerPage);
@@ -68,6 +79,7 @@ $(document).ready(function () {
     if (nextBtn) nextBtn.disabled = currentPage === totalPages;
   }
 
+  // ➕ Page солих
   function changePage(offset) {
     const totalPages = Math.ceil(postsData.length / postsPerPage);
     const newPage = currentPage + offset;
@@ -77,7 +89,7 @@ $(document).ready(function () {
     }
   }
 
-  // JSON data fetch
+  // 📦 JSON ачаалах
   fetch("posts/index.json")
     .then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -85,20 +97,22 @@ $(document).ready(function () {
     })
     .then((data) => {
       postsData = Array.isArray(data) ? data : data.posts || [];
+
       if (!postsData.length) {
         if (articleList)
           articleList.innerHTML = `<p>⚠️ Мэдээлэл олдсонгүй. JSON файл хоосон байна уу?</p>`;
         return;
       }
+
       renderPosts(currentPage);
     })
-    .catch((err) => {
-      console.error("❗ JSON load error:", err);
+    .catch((error) => {
+      console.error("❗ JSON load error:", error);
       if (articleList)
         articleList.innerHTML = `<p style="color:red">Мэдээ ачааллаж чадсангүй.<br>JSON зам эсвэл build script-ээ шалгана уу.</p>`;
     });
 
-  // Pagination button events
+  // 🔘 Pagination товч event
   if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
