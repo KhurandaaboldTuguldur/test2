@@ -2,8 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 
-const postsDir = path.join(__dirname, "posts");
+const postsDir = path.join(__dirname, "public", "posts");
 const outputFile = path.join(postsDir, "index.json");
+
 
 const allPosts = [];
 
