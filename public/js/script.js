@@ -76,7 +76,7 @@ $(document).ready(function () {
   }
 
   // 📦 JSON 데이터 로딩
-  fetch("posts/index.json")
+  fetch("public/posts/index.json")
     .then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
