@@ -2292,3 +2292,30 @@ h4{font-size:20px}.container-fluid{width:100%;padding-right:0;padding-left:0;mar
 
 .read-more {
 
+/* Trending Post 섹션을 작게 만들기 위한 CSS */
+.blog-post-widget {
+  width: 250px; /* 너비를 작게 설정 */
+  position: fixed; /* 화면 오른쪽에 고정 */
+  top: 100px; /* 적절한 위치 조정 (필요시 변경) */
+  right: 20px; /* 오른쪽 여백 */
+  background-color: #fff; /* 배경색 (선택사항) */
+  padding: 15px; /* 내부 여백 */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 그림자 효과 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  z-index: 999; /* 다른 요소보다 위에 표시 */
+  overflow-y: auto; /* 내용이 많을 경우 스크롤 가능 */
+}
+
+/* 제목 스타일 조정 */
+.latest-widget-title h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Trending 포스트 항목 스타일 */
+#trending-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

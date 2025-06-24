@@ -116,3 +116,4 @@ $(document).ready(function () {
   if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
+
