@@ -2291,3 +2291,32 @@ h4{font-size:20px}.container-fluid{width:100%;padding-right:0;padding-left:0;mar
 }
 
 .read-more {
+
+  /* Хоёр талын өндөр ижил болгох */
+.blog-post-widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Trending post-уудыг дараалалтай spacing-тай байлгах */
+#trending-posts > div {
+  margin-bottom: 15px;
+}
+
+/* Жишээ trending post item стилийг уян хатан болгох */
+.trending-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.trending-item img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
