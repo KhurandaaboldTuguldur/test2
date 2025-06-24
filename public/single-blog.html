@@ -34,61 +34,54 @@
   <!-- ✅ Scripts -->
   <script src="vendor/jQuery/jquery.min.js"></script>
   <script src="vendor/bootstrap/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://unpkg.com/gray-matter/dist/gray-matter.min.js"></script>
-  <script>
-    // 라이브러리 정상 로드 확인 (콘솔에 function이 찍혀야 정상)
-    console.log("matter:", typeof window.matter);
-    console.log("marked:", typeof window.marked);
+ <!-- ... бусад код ... -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://unpkg.com/gray-matter/dist/gray-matter.min.js"></script>
+<script>
+  document.getElementById("year").innerText = new Date().getFullYear();
 
-    // Footer 연도 자동 갱신
-    document.getElementById("year").innerText = new Date().getFullYear();
+  const slug = new URLSearchParams(window.location.search).get("slug");
+  const wrapper = document.getElementById("post-wrapper");
 
-    // 슬러그 파라미터 가져오기
-    const slug = new URLSearchParams(window.location.search).get("slug");
-    const wrapper = document.getElementById("post-wrapper");
+  function showError(message) {
+    wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">홈으로</a></p>`;
+  }
 
-    function showError(message) {
-      wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">홈으로</a></p>`;
+  function renderPost(md) {
+    if (typeof window.matter !== "function" || typeof window.marked !== "function") {
+      showError("필수 라이브러리가 로드되지 않았습니다.");
+      return;
     }
+    const parsed = window.matter(md);
+    const html = window.marked.parse(parsed.content);
+    const fm = parsed.data;
 
-    function renderPost(md) {
-      if (typeof window.matter !== "function" || typeof window.marked !== "function") {
-        showError("필수 라이브러리가 로드되지 않았습니다.");
-        return;
-      }
-      const parsed = window.matter(md); // window.matter 사용
-      const html = window.marked.parse(parsed.content); // window.marked 사용
-      const fm = parsed.data;
+    wrapper.innerHTML = `
+      <article class="blog-post">
+        <h1>${fm.title || slug}</h1>
+        ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
+        ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title || 'Post thumbnail'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
+        <div class="post-content">${html}</div>
+      </article>
+    `;
+  }
 
-      wrapper.innerHTML = `
-        <article class="blog-post">
-          <h1>${fm.title || slug}</h1>
-          ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
-          ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title || 'Post thumbnail'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
-          <div class="post-content">${html}</div>
-        </article>
-      `;
-    }
+  function fetchPost(slug) {
+    fetch(`posts/${slug}.md`)
+      .then(res => {
+        if (!res.ok) throw new Error("❗ Post not found");
+        return res.text();
+      })
+      .then(md => renderPost(md))
+      .catch(err => {
+        console.error("⚠️ 에러:", err);
+        showError("🚫 해당 포스트를 찾을 수 없습니다.");
+      });
+  }
 
-    function fetchPost(slug) {
-      fetch(`posts/${slug}.md`)
-        .then(res => {
-          if (!res.ok) throw new Error("❗ Post not found");
-          return res.text();
-        })
-        .then(md => renderPost(md))
-        .catch(err => {
-          console.error("⚠️ 에러:", err);
-          showError("🚫 해당 포스트를 찾을 수 없습니다.");
-        });
-    }
-
-    if (!slug) {
-      showError("❗ slug 파라미터가 없습니다.");
-    } else {
-      fetchPost(slug);
-    }
-  </script>
-</body>
-</html>
+  if (!slug) {
+    showError("❗ slug 파라미터가 없습니다.");
+  } else {
+    fetchPost(slug);
+  }
+</script>
