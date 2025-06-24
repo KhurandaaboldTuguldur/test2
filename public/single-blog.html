@@ -35,39 +35,30 @@
   <script src="vendor/jQuery/jquery.min.js"></script>
   <script src="vendor/bootstrap/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <!-- single-blog.html에 추가 -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://unpkg.com/gray-matter/dist/gray-matter.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://unpkg.com/gray-matter/dist/gray-matter.min.js"></script>
   <script>
-    console.log(window.matter); // gray-matter 함수가 찍혀야 정상
-    console.log(window.marked); // marked 함수가 찍혀야 정상
+    // 라이브러리 정상 로드 확인 (콘솔에 function이 찍혀야 정상)
+    console.log("matter:", typeof window.matter);
+    console.log("marked:", typeof window.marked);
 
-  </script>
-
-
-
-  <script>
     // Footer 연도 자동 갱신
     document.getElementById("year").innerText = new Date().getFullYear();
 
     // 슬러그 파라미터 가져오기
     const slug = new URLSearchParams(window.location.search).get("slug");
     const wrapper = document.getElementById("post-wrapper");
-    const loadingMsg = document.getElementById("loading-msg");
 
     function showError(message) {
       wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">홈으로</a></p>`;
     }
 
     function renderPost(md) {
-      if (typeof matter !== "function" || typeof marked === "undefined") {
+      if (typeof window.matter !== "function" || typeof window.marked !== "function") {
         showError("필수 라이브러리가 로드되지 않았습니다.");
         return;
       }
-      const parsed = matter(md);
-      const html = marked.parse(parsed.content);
+      const parsed = window.matter(md); // window.matter 사용
+      const html = window.marked.parse(parsed.content); // window.marked 사용
       const fm = parsed.data;
 
       wrapper.innerHTML = `
