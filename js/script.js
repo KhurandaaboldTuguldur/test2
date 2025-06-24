@@ -117,3 +117,57 @@ $(document).ready(function () {
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
 
+
+
+
+function renderPosts(page) {
+  if (!articleList || !trendingList) return;
+
+  articleList.innerHTML = "";
+  trendingList.innerHTML = "";
+
+  const start = (page - 1) * postsPerPage;
+  const end = start + postsPerPage;
+  const visible = postsData.slice(start, end);
+
+  visible.forEach((post) => {
+    const cardHTML = createBlogCard(post);
+    articleList.insertAdjacentHTML("beforeend", `<div>${cardHTML}</div>`);
+  });
+
+  postsData.slice(0, 3).forEach((post) => {
+    const trendingHTML = createBlogCard(post, true);
+    trendingList.insertAdjacentHTML("beforeend", trendingHTML);
+  });
+
+  const totalPages = Math.ceil(postsData.length / postsPerPage);
+  if (paginationInfo) paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+  if (prevBtn) prevBtn.disabled = currentPage === 1;
+  if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+}
+function createBlogCard(post, isTrending = false) {
+  if (isTrending) {
+    return `
+      <div class="trending-item">
+        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+        <div>
+          <p>${post.title}</p>
+          <small>${post.date || ""}</small>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <a class="blog-card" href="single-blog.html?slug=${post.slug}">
+      <div class="img-box">
+        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+      </div>
+      <div class="content-box">
+        <h3>${post.title}</h3>
+        <p>${post.description}</p>
+        <span class="read-more">Дэлгэрэнгүй →</span>
+      </div>
+    </a>
+  `;
+}
