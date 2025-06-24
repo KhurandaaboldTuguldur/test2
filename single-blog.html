@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <title>Blogge | Single Post</title>
@@ -10,14 +9,16 @@
 </head>
 
 <body>
-  <!-- Navbar -->
+  <!-- ✅ Navbar -->
   <nav class="main-nav navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="index.html"><img src="images/logo.svg" alt="logo" /></a>
+      <a class="navbar-brand" href="index.html">
+        <img src="images/logo.svg" alt="logo" />
+      </a>
     </div>
   </nav>
 
-  <!-- Main Post Section -->
+  <!-- ✅ Main Post -->
   <section class="blog-single">
     <div class="container">
       <div id="post-wrapper">
@@ -26,32 +27,31 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ✅ Footer -->
   <footer class="footer text-center">
     <p>© <span id="year"></span> Blogge</p>
   </footer>
 
-  <!-- Vendor Scripts -->
+  <!-- ✅ Scripts -->
   <script src="vendor/jQuery/jquery.min.js"></script>
   <script src="vendor/bootstrap/bootstrap.min.js"></script>
-
-  <!-- Markdown Parser -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/index.min.js"></script>
 
-  <!-- Custom Script -->
   <script>
+    // ⏳ Footer жил
     document.getElementById("year").innerText = new Date().getFullYear();
 
-    const slug = new URLSearchParams(location.search).get("slug");
+    // 🔗 slug авах
+    const slug = new URLSearchParams(window.location.search).get("slug");
     const wrapper = document.getElementById("post-wrapper");
 
     if (!slug) {
-      wrapper.innerHTML = `<p style="color:red">Slug параметр оруулаагүй байна.</p>`;
+      wrapper.innerHTML = `<p style="color:red">❗ Slug параметр байхгүй байна.</p>`;
     } else {
-      fetch(`/posts/${slug}.md`)
+      fetch(`posts/${slug}.md`)
         .then(res => {
-          if (!res.ok) throw new Error("Post not found");
+          if (!res.ok) throw new Error("❗ Post not found");
           return res.text();
         })
         .then(md => {
@@ -62,15 +62,15 @@
           wrapper.innerHTML = `
             <article class="blog-post">
               <h1>${fm.title || slug}</h1>
-              ${fm.date ? `<p><em>${new Date(fm.date).toDateString()}</em></p>` : ""}
-              ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title}" style="max-width:100%;margin:1rem 0;" />` : ""}
+              ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
+              ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
               <div class="post-content">${html}</div>
             </article>
           `;
         })
         .catch(err => {
-          console.error(err);
-          wrapper.innerHTML = `<p style="color:red">Нийтлэл олдсонгүй. Буцаад <a href="index.html">нүүр хуудас</a> руу очно уу.</p>`;
+          console.error("⚠️ Алдаа:", err);
+          wrapper.innerHTML = `<p style="color:red">🚫 Нийтлэл олдсонгүй. <a href="index.html">Нүүр хуудас руу буцах</a></p>`;
         });
     }
   </script>
