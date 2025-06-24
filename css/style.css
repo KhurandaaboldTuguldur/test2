@@ -2290,4 +2290,21 @@ h4{font-size:20px}.container-fluid{width:100%;padding-right:0;padding-left:0;mar
   overflow: hidden;
 }
 
-.read-more {
+
+/* 트렌딩 포스트 크기 조절 및 오른쪽 정렬 */
+#trending-posts {
+  width: 300px; /* 원하는 너비로 조절하세요 */
+  max-width: 100%; /* 반응형 유지 */
+  float: right; /* 오른쪽 정렬 */
+  margin-left: 20px; /* 여백 조절 */
+}
+
+/* 트렌딩 포스트 섹션을 오른쪽에 배치하는 예시 */
+.blog-post-widget {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+}
+#trending-posts {
+  width: 300px; /* 크기 조절 */
+  margin-left: 20px; /* 여백 */
+}
