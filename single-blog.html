@@ -7,13 +7,12 @@
   <link href="css/style.css" rel="stylesheet" />
   <link rel="icon" href="images/favicon.svg" type="image/x-icon" />
 </head>
-
 <body>
   <!-- ✅ Navbar -->
   <nav class="main-nav navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="index.html">
-        <img src="images/logo.svg" alt="logo" />
+        <img src="images/logo.svg" alt="Blogge logo" />
       </a>
     </div>
   </nav>
@@ -22,7 +21,7 @@
   <section class="blog-single">
     <div class="container">
       <div id="post-wrapper">
-        <p>Loading post...</p>
+        <p id="loading-msg">Loading post...</p>
       </div>
     </div>
   </section>
@@ -37,41 +36,55 @@
   <script src="vendor/bootstrap/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/index.min.js"></script>
-
   <script>
-    // ⏳ Footer жил
+    // Footer 연도 자동 갱신
     document.getElementById("year").innerText = new Date().getFullYear();
 
-    // 🔗 slug авах
+    // 슬러그 파라미터 가져오기
     const slug = new URLSearchParams(window.location.search).get("slug");
     const wrapper = document.getElementById("post-wrapper");
+    const loadingMsg = document.getElementById("loading-msg");
 
-    if (!slug) {
-      wrapper.innerHTML = `<p style="color:red">❗ Slug параметр байхгүй байна.</p>`;
-    } else {
+    function showError(message) {
+      wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">홈으로</a></p>`;
+    }
+
+    function renderPost(md) {
+      if (typeof matter !== "function" || typeof marked === "undefined") {
+        showError("필수 라이브러리가 로드되지 않았습니다.");
+        return;
+      }
+      const parsed = matter(md);
+      const html = marked.parse(parsed.content);
+      const fm = parsed.data;
+
+      wrapper.innerHTML = `
+        <article class="blog-post">
+          <h1>${fm.title || slug}</h1>
+          ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
+          ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title || 'Post thumbnail'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
+          <div class="post-content">${html}</div>
+        </article>
+      `;
+    }
+
+    function fetchPost(slug) {
       fetch(`posts/${slug}.md`)
         .then(res => {
           if (!res.ok) throw new Error("❗ Post not found");
           return res.text();
         })
-        .then(md => {
-          const parsed = matter(md);
-          const html = marked.parse(parsed.content);
-          const fm = parsed.data;
-
-          wrapper.innerHTML = `
-            <article class="blog-post">
-              <h1>${fm.title || slug}</h1>
-              ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
-              ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
-              <div class="post-content">${html}</div>
-            </article>
-          `;
-        })
+        .then(md => renderPost(md))
         .catch(err => {
-          console.error("⚠️ Алдаа:", err);
-          wrapper.innerHTML = `<p style="color:red">🚫 Нийтлэл олдсонгүй. <a href="index.html">Нүүр хуудас руу буцах</a></p>`;
+          console.error("⚠️ 에러:", err);
+          showError("🚫 해당 포스트를 찾을 수 없습니다.");
         });
+    }
+
+    if (!slug) {
+      showError("❗ slug 파라미터가 없습니다.");
+    } else {
+      fetchPost(slug);
     }
   </script>
 </body>
