@@ -27,7 +27,7 @@ $(document).ready(function () {
   });
 
   // 📄 Pagination 설정
-  const postsPerPage = 5;
+  const postsPerPage = 9; // 3x3 grid
   let currentPage = 1;
   let postsData = [];
 
@@ -37,24 +37,6 @@ $(document).ready(function () {
   const paginationInfo = document.getElementById("pagination-info");
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
-
-  // 🧩 블로그 카드 HTML 생성 함수
-  function createBlogCard(post) {
-    return `
-      <div class="col-lg-4">
-        <a class="blog-card" href="single-blog.html?slug=${post.slug}">
-          <div class="img-box">
-            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
-          </div>
-          <div class="content-box">
-            <h3>${post.title}</h3>
-            <p>${post.description}</p>
-            <span class="read-more">자세히 보기 →</span>
-          </div>
-        </a>
-      </div>
-    `;
-  }
 
   // 🔁 포스트 렌더링
   function renderPosts(page) {
@@ -67,10 +49,14 @@ $(document).ready(function () {
     const end = start + postsPerPage;
     const visible = postsData.slice(start, end);
 
-    visible.forEach((post, index) => {
-      const card = createBlogCard(post);
-      articleList.insertAdjacentHTML("beforeend", card);
-      if (index < 3) trendingList.insertAdjacentHTML("beforeend", card);
+    visible.forEach((post) => {
+      const cardHTML = createBlogCard(post);
+      articleList.insertAdjacentHTML("beforeend", cardHTML);
+    });
+
+    postsData.slice(0, 3).forEach((post) => {
+      const trendingHTML = createBlogCard(post, true);
+      trendingList.insertAdjacentHTML("beforeend", trendingHTML);
     });
 
     const totalPages = Math.ceil(postsData.length / postsPerPage);
@@ -117,34 +103,6 @@ $(document).ready(function () {
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
 
-
-
-
-function renderPosts(page) {
-  if (!articleList || !trendingList) return;
-
-  articleList.innerHTML = "";
-  trendingList.innerHTML = "";
-
-  const start = (page - 1) * postsPerPage;
-  const end = start + postsPerPage;
-  const visible = postsData.slice(start, end);
-
-  visible.forEach((post) => {
-    const cardHTML = createBlogCard(post);
-    articleList.insertAdjacentHTML("beforeend", `<div>${cardHTML}</div>`);
-  });
-
-  postsData.slice(0, 3).forEach((post) => {
-    const trendingHTML = createBlogCard(post, true);
-    trendingList.insertAdjacentHTML("beforeend", trendingHTML);
-  });
-
-  const totalPages = Math.ceil(postsData.length / postsPerPage);
-  if (paginationInfo) paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-  if (prevBtn) prevBtn.disabled = currentPage === 1;
-  if (nextBtn) nextBtn.disabled = currentPage === totalPages;
-}
 function createBlogCard(post, isTrending = false) {
   if (isTrending) {
     return `

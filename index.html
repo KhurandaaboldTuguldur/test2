@@ -1,69 +1,44 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="mn">
 
 <head>
   <meta charset="utf-8" />
   <title>Blogge | Personal Blog Site</title>
-
-  <!--Meta For No Index-->
-  <meta name="robots" content="noindex, Nofollow, Noimageindex">
-
-  <!-- mobile responsive meta -->
+  <meta name="robots" content="noindex, nofollow, noimageindex">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
-  <!-- Theme Stylesheet -->
   <link href="css/style.css" rel="stylesheet" />
-
-  <!--Favicon-->
   <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon" />
-  <link rel="icon" href="images/favicon.svg" type="image/x-icon" />
 </head>
 
 <body>
 
-<!-- Navbar Start -->
+<!-- ✅ Navbar -->
 <nav class="main-nav navbar navbar-expand-lg">
   <div class="container">
-    <!-- Logo -->
     <a class="navbar-brand" href="index.html">
       <img class="logo-main" src="images/logo.svg" alt="logo" />
     </a>
-    <!-- Toogle Button -->
     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#mainNav">
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
     <div class="collapse navbar-collapse nav-list" id="mainNav">
-      <!-- Navigation Links -->
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">Home </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.html">About </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
-      <!-- Social Link -->
       <ul class="main-nav-social">
-        <li>
-          <a href="#"><i class="fa fa-facebook"></i></a>
-        </li>
-        <li>
-          <a href="#"><i class="fa fa-twitter"></i></a>
-        </li>
-        <li>
-          <a href="#"><i class="fa fa-instagram"></i></a>
-        </li>
+        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
       </ul>
     </div>
   </div>
 </nav>
-<!-- Navbar End -->
 
+<!-- ✅ Featured Section -->
 <section class="featured">
   <div class="container">
     <div class="row">
@@ -74,14 +49,9 @@
               <img src="images/author.png" alt="author" />
               <p>By <span>Mary Astor</span></p>
             </div>
-            <a href="single-blog.html" class="featured-post-title">
-              Every Next Level of Your Life Will Demand
-            </a>
+            <a href="single-blog.html" class="featured-post-title">Every Next Level of Your Life Will Demand</a>
             <ul class="featured-post-meta">
-              <li>
-                <i class="fa fa-clock-o"></i>
-                October 19, 2020 - 3 min read
-              </li>
+              <li><i class="fa fa-clock-o"></i> October 19, 2020 - 3 min read</li>
             </ul>
           </div>
           <div class="featured-post-thumb">
@@ -93,49 +63,33 @@
   </div>
 </section>
 
-<!-- Articles Section Start -->
-<!-- Articles -->
+<!-- ✅ Articles + Trending Section -->
 <section class="blog" id="articles-section">
   <div class="container">
     <div class="row">
-      <!-- Зүүн тал: нийтлэлүүд -->
       <div class="col-lg-8">
         <div id="articles-list" class="articles-grid">
           <!-- JS-аар мэдээнүүд энд орж ирнэ -->
         </div>
+        <div class="pagination-controls text-center mt-4">
+          <button id="prevPage" class="btn btn-outline-secondary mr-2">← Өмнөх</button>
+          <span id="pagination-info">Page 1</span>
+          <button id="nextPage" class="btn btn-outline-secondary ml-2">Дараах →</button>
+        </div>
       </div>
-
-      <!-- Баруун тал: Trending -->
       <div class="col-lg-4">
-      <div class="trending-box">
-        <h3 class="section-title">Trending Post</h3>
-        <div id="trending-posts"></div>
-            <!-- JS-аар Trending постууд энд орж ирнэ -->
-          </div>
+        <div class="trending-box">
+          <h3 class="section-title">🔥 Trending Post</h3>
+          <div id="trending-posts"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ❌ Duplicate Trending Removed -->
 
-<!-- Trending -->
-<div class="blog-post-widget">
-  <div class="latest-widget-title">
-    <h2>Trending Post</h2>
-  </div>
-  <div id="trending-posts">
-    <!-- JS-аар автоматаар нэмэгдэнэ -->
-  </div>
-</div>
-
-<!-- Articles Section End -->
-<div class="pagination-controls text-center mt-4">
-  <button id="prevPage" class="btn btn-outline-secondary mr-2">← Previous</button>
-  <span id="pagination-info">Page 1 of N</span>
-  <button id="nextPage" class="btn btn-outline-secondary ml-2">Next →</button>
-</div>
-
+<!-- ✅ Instagram Feed -->
 <section class="instagram">
   <a href="#">
     <i class="fa fa-instagram" aria-hidden="true"></i>
@@ -145,31 +99,19 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="instagram-item">
-
-          <div class="instagram-item-thum">
-            <img src="images/blog/case-studies-1.png" alt="image">
-          </div>
-          <div class="instagram-item-thum">
-            <img src="images/blog/case-studies-2.png" alt="image">
-          </div>
-          <div class="instagram-item-thum">
-            <img src="images/blog/case-studies-3.png" alt="image">
-          </div>
-          <div class="instagram-item-thum">
-            <img src="images/blog/case-studies-4.png" alt="image">
-          </div>
-          <div class="instagram-item-thum">
-            <img src="images/blog/case-studies-5.png" alt="image">
-          </div>
-          <div class="instagram-item-thum">
-            <img src="images/blog/case-studies-6.png" alt="image">
-          </div>
+          <div class="instagram-item-thum"><img src="images/blog/case-studies-1.png" alt="image"></div>
+          <div class="instagram-item-thum"><img src="images/blog/case-studies-2.png" alt="image"></div>
+          <div class="instagram-item-thum"><img src="images/blog/case-studies-3.png" alt="image"></div>
+          <div class="instagram-item-thum"><img src="images/blog/case-studies-4.png" alt="image"></div>
+          <div class="instagram-item-thum"><img src="images/blog/case-studies-5.png" alt="image"></div>
+          <div class="instagram-item-thum"><img src="images/blog/case-studies-6.png" alt="image"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ✅ Footer -->
 <section class="footer">
   <div class="container-fluid">
     <div class="row">
@@ -183,15 +125,9 @@
       <div class="col-lg-6 mx-auto">
         <div class="footer-nav">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Home </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
           </ul>
         </div>
       </div>
@@ -200,15 +136,9 @@
       <div class="col-lg-6 mx-auto">
         <div class="sociale-icon">
           <ul>
-            <li>
-              <a href="#"><i class="fa fa-facebook"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fa fa-twitter"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fa fa-instagram"></i></a>
-            </li>
+            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
           </ul>
         </div>
       </div>
@@ -216,24 +146,21 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="copy-right">
-          <p>© Copyright <span id="copyrightYear"></span> - All Rights Reserved by <a href="https://staticmania.com/" target="_blank">StaticMania</a> Distributed By <a href="https://themewagon.com/" target="blank">ThemeWagon</a></p>
+          <p>© <span id="copyrightYear"></span> - Бүх эрх хуулиар хамгаалагдсан. Загвар: <a href="https://staticmania.com/">StaticMania</a> & <a href="https://themewagon.com/">ThemeWagon</a></p>
         </div>
       </div>
     </div>
   </div>
 </section>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-<!-- Google Map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9rV6yesIygoVKTD6QLf_iCa9eiIIHqZ0&libraries=geometry">
-</script>
-<!-- Vendor JS -->
+<!-- ✅ Scripts -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=geometry"></script>
 <script src="vendor/jQuery/jquery.min.js"></script>
 <script src="vendor/bootstrap/bootstrap.min.js"></script>
 <script src="vendor/slick/slick.min.js"></script>
 <script src="vendor/g-map/gmap.js"></script>
-<!-- Main JS -->
 <script src="js/script.js"></script>
-</body>
 
+</body>
 </html>
