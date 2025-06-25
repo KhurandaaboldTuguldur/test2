@@ -2,9 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 
-const postsDir = path.join(__dirname, "public", "posts");
+const postsDir = path.join(__dirname, "posts");
 const outputFile = path.join(postsDir, "index.json");
-
 
 const allPosts = [];
 
@@ -12,6 +11,7 @@ fs.readdirSync(postsDir).forEach((file) => {
   const ext = path.extname(file);
   const fullPath = path.join(postsDir, file);
 
+  // index.json 등 md가 아닌 파일은 무시
   if (ext === ".md" && fs.lstatSync(fullPath).isFile()) {
     const slug = path.basename(file, ".md");
     const fileContent = fs.readFileSync(fullPath, "utf-8");
