@@ -32,12 +32,8 @@
   </footer>
 
   <!-- ✅ Scripts -->
-  <script src="vendor/jQuery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/bootstrap.min.js"></script>
-  <!-- Markdown болон front-matter парсингийн 라이브러리 -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/front-matter@4.0.2/dist/front-matter.min.js"></script>
-
   <script>
     document.getElementById("year").innerText = new Date().getFullYear();
 
@@ -49,18 +45,14 @@
     }
 
     function renderPost(md) {
-      console.log("window.matter:", window.matter, "window.marked:", window.marked);
-      console.log("md file content:", md);
-
-      if (typeof window.matter !== "function" || typeof window.marked !== "function") {
+      // front-matter와 marked.js가 정상적으로 로드됐는지 확인
+      if (typeof window.frontMatter !== "object" || typeof window.marked !== "function") {
         showError("필수 라이브러리가 로드되지 않았습니다.");
         return;
       }
-      const parsed = window.matter(md);
-      console.log("parsed:", parsed);
-
-      const html = window.marked.parse(parsed.content);
-      const fm = parsed.data;
+      const parsed = window.frontMatter(md);
+      const html = window.marked.parse(parsed.body);
+      const fm = parsed.attributes;
 
       wrapper.innerHTML = `
         <article class="blog-post">
