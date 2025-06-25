@@ -1,25 +1,36 @@
-<!-- single-blog.html 예시 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <!-- 생략 -->
+  <meta charset="utf-8" />
+  <title>상세 뉴스 보기 | Blogge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="css/style.css" rel="stylesheet" />
 </head>
 <body>
-  <!-- 생략 -->
-  <div id="post-wrapper"></div>
+  <!-- ✅ 상단 로고 또는 네비게이션 (선택사항) -->
+  <nav>
+    <a href="index.html">← 홈으로</a>
+  </nav>
 
-  <footer>
+  <!-- ✅ 콘텐츠 영역 -->
+  <main class="container" style="max-width: 720px; margin: 2rem auto;">
+    <div id="post-wrapper">
+      <p>⏳ 뉴스를 불러오는 중입니다...</p>
+    </div>
+  </main>
+
+  <!-- ✅ 푸터 -->
+  <footer style="text-align: center; margin: 2rem 0;">
     <p>© <span id="year"></span> Blogge</p>
   </footer>
 
-  <!-- ✅ 오직 아래 2개만! -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://unpkg.com/front-matter@4.0.2/dist/front-matter.min.js"></script>
+  <!-- ✅ 필수 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/front-matter@4.0.2/dist/front-matter.min.js"></script>
 
-</script>
-
-
+  <!-- ✅ 마크다운 렌더링 스크립트 -->
   <script>
+    // 연도 자동 표시
     document.getElementById("year").innerText = new Date().getFullYear();
 
     const slug = new URLSearchParams(window.location.search).get("slug");
@@ -31,9 +42,10 @@
 
     function renderPost(md) {
       if (typeof window.frontMatter !== "object" || typeof window.marked !== "function") {
-        showError("필수 라이브러리가 로드되지 않았습니다.");
+        showError("❗ 필수 라이브러리가 로드되지 않았습니다.");
         return;
       }
+
       const parsed = window.frontMatter(md);
       const html = window.marked.parse(parsed.body);
       const fm = parsed.attributes;
@@ -42,7 +54,7 @@
         <article class="blog-post">
           <h1>${fm.title || slug}</h1>
           ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
-          ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title || 'Post thumbnail'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
+          ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title || '썸네일'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
           <div class="post-content">${html}</div>
         </article>
       `;
@@ -57,12 +69,12 @@
         .then(md => renderPost(md))
         .catch(err => {
           console.error("⚠️ 에러:", err);
-          showError("🚫 해당 포스트를 찾을 수 없습니다.");
+          showError("🚫 해당 포스트를 불러올 수 없습니다.");
         });
     }
 
     if (!slug) {
-      showError("❗ slug 파라미터가 제공되지 않았습니다.");
+      showError("❗ URL에 slug 파라미터가 없습니다.");
     } else {
       fetchPost(slug);
     }
