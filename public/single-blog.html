@@ -1,51 +1,25 @@
+<!-- single-blog.html 예시 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Blogge | Single Post</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="css/style.css" rel="stylesheet" />
-  <link rel="icon" href="images/favicon.svg" type="image/x-icon" />
+  ...생략...
 </head>
 <body>
-  <!-- ✅ Navbar -->
-  <nav class="main-nav navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">
-        <img src="images/logo.svg" alt="Blogge logo" />
-      </a>
-    </div>
-  </nav>
-
-  <!-- ✅ Main Post -->
-  <section class="blog-single">
-    <div class="container">
-      <div id="post-wrapper">
-        <p id="loading-msg">Loading post...</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ✅ Footer -->
-  <footer class="footer text-center">
+  ...생략...
+  <footer>
     <p>© <span id="year"></span> Blogge</p>
   </footer>
-
-  <!-- ✅ Scripts -->
+  <!-- ✅ 오직 아래 2개만! -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/front-matter@4.0.2/dist/front-matter.min.js"></script>
   <script>
     document.getElementById("year").innerText = new Date().getFullYear();
-
     const slug = new URLSearchParams(window.location.search).get("slug");
     const wrapper = document.getElementById("post-wrapper");
-
     function showError(message) {
       wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">홈으로</a></p>`;
     }
-
     function renderPost(md) {
-      // front-matter와 marked.js가 정상적으로 로드됐는지 확인
       if (typeof window.frontMatter !== "object" || typeof window.marked !== "function") {
         showError("필수 라이브러리가 로드되지 않았습니다.");
         return;
@@ -53,7 +27,6 @@
       const parsed = window.frontMatter(md);
       const html = window.marked.parse(parsed.body);
       const fm = parsed.attributes;
-
       wrapper.innerHTML = `
         <article class="blog-post">
           <h1>${fm.title || slug}</h1>
@@ -63,7 +36,6 @@
         </article>
       `;
     }
-
     function fetchPost(slug) {
       fetch(`posts/${slug}.md`)
         .then(res => {
@@ -76,7 +48,6 @@
           showError("🚫 해당 포스트를 찾을 수 없습니다.");
         });
     }
-
     if (!slug) {
       showError("❗ slug 파라метр алга.");
     } else {
