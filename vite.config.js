@@ -1,7 +1,8 @@
 // vite.config.js
 export default {
+  publicDir: 'public', // ✅ public 폴더를 복사 대상으로 지정
   build: {
-    outDir: 'dist',       // Netlify가 찾을 폴더
-    emptyOutDir: true     // 기존 내용 제거 후 새로 빌드
+    outDir: 'dist',
+    emptyOutDir: true
   }
 };
