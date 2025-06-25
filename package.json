@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "copy-md": "node copy-markdown.js",
-    "generate": "node generate-content.js",
+    "generate": "node generate-index.js",
     "build": "npm run copy-md && npm run generate && vite build"
   },
   "dependencies": {
