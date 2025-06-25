@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "copy-md": "node copy-markdown.js",
     "generate": "node generate-index.js",
-    "build": "npm run generate && vite build"
+    "build": "npm run copy-md && npm run generate && vite build"
   },
   "dependencies": {
     "gray-matter": "^4.0.3"
