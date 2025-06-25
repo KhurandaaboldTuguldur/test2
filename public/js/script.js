@@ -92,7 +92,9 @@ $(document).ready(function () {
 });
 
 function createBlogCard(post, isTrending = false, slug = "") {
-  const thumbnail = post.thumbnail || "images/default-thumbnail.jpg";
+  // ✅ 슬래시(/)로 시작하는 경로 제거
+  const rawThumbnail = (post.thumbnail || "").replace(/^\/+/, "");
+  const thumbnail = rawThumbnail || "images/default-thumbnail.jpg";
   const title = post.title || "제목 없음";
   const description = post.description || "";
   const date = post.date || "";
@@ -110,4 +112,12 @@ function createBlogCard(post, isTrending = false, slug = "") {
     <a class="blog-card" href="single-blog.html?slug=${slug}">
       <div class="img-box">
         <img src="${thumbnail}" alt="${title}" loading="lazy">
-      </div
+      </div>
+      <div class="content-box">
+        <h3>${title}</h3>
+        <p>${description}</p>
+        <span class="read-more">자세히 보기 →</span>
+      </div>
+    </a>
+  `;
+}
