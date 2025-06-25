@@ -17,7 +17,6 @@ function copyMarkdownPlugin() {
     }
   };
 }
-import { defineConfig } from 'vite';
 
 export default defineConfig({
   publicDir: 'public',
