@@ -41,31 +41,36 @@ $(document).ready(function () {
   const nextBtn = document.getElementById("nextPage");
 
   // 🔁 Мэдээ рэндэрлэх
-  function renderPosts(page) {
-    if (!articleList || !trendingList) return;
+// 🔁 Мэдээ рэндэрлэх
+function renderPosts(page) {
+  if (!articleList || !trendingList) return;
 
-    articleList.innerHTML = "";
-    trendingList.innerHTML = "";
+  articleList.innerHTML = "";
+  trendingList.innerHTML = "";
 
-    const start = (page - 1) * postsPerPage;
-    const end = start + postsPerPage;
-    const visible = postsData.slice(start, end);
+  const start = (page - 1) * postsPerPage;
+  const end = start + postsPerPage;
+  const visible = postsData.slice(start, end);
 
-    visible.forEach((post) => {
-      const cardHTML = createBlogCard(post);
-      articleList.insertAdjacentHTML("beforeend", cardHTML);
-    });
+  visible.forEach((post, idx) => {
+    // 자동 slug: post-1, post-2, ...
+    const autoSlug = `post-${start + idx + 1}`;
+    const cardHTML = createBlogCard(post, false, autoSlug);
+    articleList.insertAdjacentHTML("beforeend", cardHTML);
+  });
 
-    postsData.slice(0, 3).forEach((post) => {
-      const trendingHTML = createBlogCard(post, true);
-      trendingList.insertAdjacentHTML("beforeend", trendingHTML);
-    });
+  postsData.slice(0, 3).forEach((post, idx) => {
+    const trendingSlug = `post-${idx + 1}`;
+    const trendingHTML = createBlogCard(post, true, trendingSlug);
+    trendingList.insertAdjacentHTML("beforeend", trendingHTML);
+  });
 
-    const totalPages = Math.ceil(postsData.length / postsPerPage);
-    if (paginationInfo) paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-    if (prevBtn) prevBtn.disabled = currentPage === 1;
-    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
-  }
+  const totalPages = Math.ceil(postsData.length / postsPerPage);
+  if (paginationInfo) paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+  if (prevBtn) prevBtn.disabled = currentPage === 1;
+  if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+}
+
 
   // ➕ Хуудас солих
   function changePage(offset) {
