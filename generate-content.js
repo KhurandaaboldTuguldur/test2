@@ -19,12 +19,13 @@ fs.readdirSync(postsDir).forEach((file) => {
 
     if (data.title && data.description && data.date) {
       allPosts.push({
-        title: data.title,
-        description: data.description,
-        date: data.date,
-        thumbnail: data.thumbnail || "",
-        slug: slug
-      });
+      title: data.title,
+      description: data.description,
+      date: data.date,
+      thumbnail: (data.thumbnail || "").replace(/^\/+/, ""),
+      slug: slug
+    });
+
     } else {
       console.warn(`⚠️ "${file}" 파일에 title, description, date 중 하나 이상이 없습니다.`);
     }
