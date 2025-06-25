@@ -1,18 +1,15 @@
-const fs = require("fs");
-const path = require("path");
+// copy-markdown.js
+const fs = require('fs');
+const path = require('path');
 
-const sourceDir = path.join(__dirname, "posts"); // 원본 .md 위치
-const targetDir = path.join(__dirname, "public", "posts"); // 복사될 위치
+const srcDir = path.join(__dirname, 'posts');
+const destDir = path.join(__dirname, 'public', 'posts');
 
-if (!fs.existsSync(targetDir)) {
-  fs.mkdirSync(targetDir, { recursive: true });
-}
+fs.mkdirSync(destDir, { recursive: true });
 
-fs.readdirSync(sourceDir).forEach((file) => {
-  if (path.extname(file).toLowerCase() === ".md") {
-    const srcFile = path.join(sourceDir, file);
-    const destFile = path.join(targetDir, file);
-    fs.copyFileSync(srcFile, destFile);
+fs.readdirSync(srcDir).forEach(file => {
+  if (file.endsWith('.md')) {
+    fs.copyFileSync(path.join(srcDir, file), path.join(destDir, file));
     console.log(`✅ ${file} 복사 완료`);
   }
 });
