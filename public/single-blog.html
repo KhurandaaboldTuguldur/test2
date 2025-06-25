@@ -55,8 +55,9 @@
         showError("필수 라이브러리가 로드되지 않았습니다.");
         return;
       }
-      const parsed = window.matter(md);
+      const parsed = (window.matter?.default || window.matter)(md);
       const html = window.marked.parse(parsed.content);
+
       const fm = parsed.data;
 
       wrapper.innerHTML = `
