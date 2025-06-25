@@ -1,12 +1,12 @@
 $(document).ready(function () {
   "use strict";
 
-  // ⏳ Автомат он
+  // ⏳ 자동 연도
   const year = new Date().getFullYear();
   const copyrightEl = document.getElementById("copyrightYear");
   if (copyrightEl) copyrightEl.textContent = year;
 
-  // 🌀 Slick slider (хэрвээ widget-slider байгаа бол)
+  // 🌀 Slick slider (widget-slider 있을 때)
   if ($(".widget-slider").length) {
     $(".widget-slider").slick({
       dots: false,
@@ -23,24 +23,24 @@ $(document).ready(function () {
     });
   }
 
-  // 📌 Scroll үед navbar-д background нэмэх
+  // 📌 스크롤 시 navbar 배경
   $(window).on("scroll", function () {
     $("nav").toggleClass("nav-bg", $(this).scrollTop() > 0);
   });
 
-  // 📄 Pagination тохиргоо
+  // 📄 Pagination 설정
   const postsPerPage = 9; // 3x3 grid
   let currentPage = 1;
   let postsData = [];
 
-  // 🧱 DOM элементүүд
+  // 🧱 DOM 요소
   const articleList = document.getElementById("articles-list");
   const trendingList = document.getElementById("trending-posts");
   const paginationInfo = document.getElementById("pagination-info");
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
 
-  // 🔁 Мэдээ рэндэрлэх
+  // 🔁 뉴스 렌더링
   function renderPosts(page) {
     if (!articleList || !trendingList) return;
 
@@ -70,7 +70,7 @@ $(document).ready(function () {
     if (nextBtn) nextBtn.disabled = currentPage === totalPages;
   }
 
-  // ➕ Хуудас солих
+  // ➕ 페이지 이동
   function changePage(offset) {
     const totalPages = Math.ceil(postsData.length / postsPerPage);
     const newPage = currentPage + offset;
@@ -80,7 +80,7 @@ $(document).ready(function () {
     }
   }
 
-  // 📦 JSON дата ачаалах
+  // 📦 JSON 데이터 로드
   fetch("posts/index.json")
     .then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -88,27 +88,25 @@ $(document).ready(function () {
     })
     .then((data) => {
       postsData = Array.isArray(data) ? data : data.posts || [];
-
       if (!postsData.length) {
         if (articleList)
-          articleList.innerHTML = `<p>⚠️ Мэдээ алга байна. JSON файл шалгана уу.</p>`;
+          articleList.innerHTML = `<p>⚠️ 뉴스가 없습니다. JSON 파일을 확인하세요.</p>`;
         return;
       }
-
       renderPosts(currentPage);
     })
     .catch((error) => {
-      console.error("❗ JSON ачаалах алдаа:", error);
+      console.error("❗ JSON 로드 오류:", error);
       if (articleList)
-        articleList.innerHTML = `<p style="color:red">Мэдээ ачаалж чадсангүй.<br>index.json зам эсвэл build script шалгаарай.</p>`;
+        articleList.innerHTML = `<p style="color:red">뉴스를 불러오지 못했습니다.<br>index.json 경로나 build script를 확인하세요.</p>`;
     });
 
-  // 🔘 Хуудаслах товчлуурууд
+  // 🔘 페이지네이션 버튼
   if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
 });
 
-// Мэдээний карт үүсгэх функц
+// 뉴스 카드 생성 함수
 function createBlogCard(post, isTrending = false, slug = "") {
   if (isTrending) {
     return `
