@@ -17,7 +17,7 @@ function copyMarkdownPlugin() {
     }
   };
 }
-
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   publicDir: 'public',
@@ -28,6 +28,5 @@ export default defineConfig({
       input: 'index.html'
     }
   },
-  // 👇 이 줄은 있어야 해요
-  assetsInclude: ['**/*.md', '**/*.json']
+  assetsInclude: ['**/*.md']
 });
