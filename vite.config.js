@@ -18,11 +18,16 @@ function copyMarkdownPlugin() {
   };
 }
 
+
 export default defineConfig({
   publicDir: 'public',
   build: {
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      input: 'index.html'
+    }
   },
-  plugins: [copyMarkdownPlugin()]
+  // 👇 이 줄은 있어야 해요
+  assetsInclude: ['**/*.md', '**/*.json']
 });
