@@ -6,6 +6,7 @@
     "copy-md": "node copy-markdown.js",
     "generate": "node generate-index.js",
     "build": "npm run copy-md && npm run generate && npx vite build"
+
   },
   "dependencies": {
     "gray-matter": "^4.0.3"
