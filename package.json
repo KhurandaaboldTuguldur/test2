@@ -5,9 +5,8 @@
   "scripts": {
     "copy-md": "node copy-markdown.js",
     "generate": "node generate-index.js",
-    "build": "npm run copy-md && npm run generate && node --no-warnings node_modules/vite/bin/vite.js build"
-
-
+    "build": "npm run copy-md && npm run generate && node --no-warnings node_modules/vite/bin/vite.js build",
+    "prebuild": "npm run copy-md"
   },
   "dependencies": {
     "gray-matter": "^4.0.3"
