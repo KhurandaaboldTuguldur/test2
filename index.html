@@ -175,7 +175,7 @@
       card.className = 'article-card';
       card.href = `single-blog.html?slug=${post.slug}`;
       card.innerHTML = `
-        <img src="${post.image || '/images/default.jpg'}" alt="${post.title}" class="article-image">
+        <img src="${post.thumbnail || '/images/default.jpg'}" alt="${post.title}" class="article-image">
         <div class="article-content">
           <h4>${post.title}</h4>
           <small>${post.date || ''}</small>
@@ -206,3 +206,6 @@
 
 </body>
 </html>
+
+
+
