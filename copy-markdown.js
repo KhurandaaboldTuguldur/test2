@@ -1,10 +1,8 @@
-// copy-markdown.js
 const fs = require('fs');
 const path = require('path');
 
-const destDirPublic = path.join(__dirname, 'public', 'posts');
-const destDirDist = path.join(__dirname, 'dist', 'posts');
-
+const srcDir = path.join(__dirname, 'posts');
+const destDir = path.join(__dirname, 'dist', 'posts'); // ← ❗ 이 줄을 꼭 넣어야 함!
 
 fs.mkdirSync(destDir, { recursive: true });
 
