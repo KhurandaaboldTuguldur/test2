@@ -27,7 +27,8 @@ function copyMarkdownPlugin() {
 }
 
 export default defineConfig({
-  publicDir: false, // 🔧 public 폴더를 사용하지 않으므로 false 처리
+  assetsInclude: ['**/*.md', '**/*.jpg', '**/*.png', '**/*.jpeg'],
+  publicDir: false,
   build: {
     outDir: 'dist',
     emptyOutDir: true,
@@ -38,6 +39,7 @@ export default defineConfig({
       }
     }
   },
-  assetsInclude: ['**/*.md'],
+
   plugins: [copyMarkdownPlugin()]
 });
+
