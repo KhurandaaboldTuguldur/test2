@@ -4,9 +4,10 @@
   "description": "",
   "scripts": {
     "copy-md": "node copy-markdown.js",
+    "copy-images": "node copy-images.js",
     "generate": "node generate-index.js",
-    "prebuild": "npm run copy-md",
-    "build": "npm run copy-md && node --no-warnings node_modules/vite/bin/vite.js build && npm run generate"
+    "prebuild": "npm run copy-md && npm run copy-images",
+    "build": "vite build && npm run generate"
 
     
   },
