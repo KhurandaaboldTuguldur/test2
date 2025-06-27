@@ -3,12 +3,11 @@ const path = require("path");
 const matter = require("gray-matter");
 
 const postsDir = path.join(__dirname, "posts");
-const outputDir = path.join(__dirname, "dist", "posts"); // ✅ 최종 저장 위치
+const outputDir = path.join(__dirname, "dist", "posts");
 const outputFile = path.join(outputDir, "index.json");
 
 const allPosts = [];
 
-// dist/posts 폴더가 없다면 생성
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true });
 }
@@ -17,18 +16,21 @@ fs.readdirSync(postsDir).forEach((file) => {
   const ext = path.extname(file);
   const fullPath = path.join(postsDir, file);
 
-  // .md만 처리, 나머지는 무시
   if (ext === ".md" && fs.lstatSync(fullPath).isFile()) {
     const slug = path.basename(file, ".md");
     const fileContent = fs.readFileSync(fullPath, "utf-8");
     const { data } = matter(fileContent);
 
     if (data.title && data.description && data.date) {
+      const rawThumb = data.thumbnail || "";
+      const cleanThumb = rawThumb.replace(/^\/+/, "");
+      const filename = path.basename(cleanThumb);
+
       allPosts.push({
         title: data.title,
         description: data.description,
         date: data.date,
-        thumbnail: `images/uploads/${path.basename(data.thumbnail || "")}`,
+        thumbnail: `images/uploads/${filename}`,
         slug: slug
       });
     } else {
