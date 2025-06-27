@@ -24,7 +24,8 @@ fs.readdirSync(postsDir).forEach((file) => {
     if (data.title && data.description && data.date) {
       const rawThumb = data.thumbnail || "";
       const cleanThumb = rawThumb.replace(/^\/+/, "");
-      const filename = path.basename(cleanThumb);
+      const filename = path.basename(cleanThumb || "default.jpg");
+
 
       allPosts.push({
         title: data.title,
