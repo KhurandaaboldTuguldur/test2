@@ -1,33 +1,92 @@
 <!DOCTYPE html>
-<html lang="mn">
-
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <title>Blogge | Personal Blog Site</title>
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <link rel="shortcut icon" href="/assets/favicon-XJlipzv7.svg" type="image/x-icon" />
-  <link rel="stylesheet" crossorigin href="/assets/index-B_kKi5Z5.css">
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link href="css/style.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon" />
 
+  <!-- ✅ 카드 및 이미지 스타일 추가 -->
+  <style>
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .articles-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .articles-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .article-card {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: 0.2s ease-in-out;
+    }
+
+    .article-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+    }
+
+    .article-content {
+      padding: 12px 16px;
+    }
+
+    .article-card h4 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .article-card small {
+      color: #888;
+      font-size: 0.85rem;
+      display: block;
+      margin-top: 6px;
+    }
+  </style>
+</head>
 <body>
 
 <!-- ✅ Navbar -->
 <nav class="main-nav navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand" href="index.html">
-      <img class="logo-main" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='115.77'%20height='21.81'%20viewBox='0%200%20115.77%2021.81'%3e%3cpath%20id='Path_5'%20fill='%23242424'%20d='M5.04-10.83H8.67a9.86,9.86,0,0,0,3.51-.57,5.285,5.285,0,0,0,2.355-1.665,4.183,4.183,0,0,0,.855-2.655,5.312,5.312,0,0,0-.48-2.34,4.279,4.279,0,0,0-1.38-1.635,6.519,6.519,0,0,0-2.13-.975A10.529,10.529,0,0,0,8.67-21H2.34V0H9.03a10.967,10.967,0,0,0,3.915-.645,5.7,5.7,0,0,0,2.67-1.995,5.694,5.694,0,0,0,.975-3.42,5.234,5.234,0,0,0-.6-2.58,4.994,4.994,0,0,0-1.65-1.77,7.616,7.616,0,0,0-2.415-1.02,12.286,12.286,0,0,0-2.9-.33H5.04v1.95H8.82a6.107,6.107,0,0,1,1.65.21,4.036,4.036,0,0,1,1.32.63,2.762,2.762,0,0,1,.87,1.05,3.46,3.46,0,0,1,.3,1.5,3.346,3.346,0,0,1-.54,1.95A3.288,3.288,0,0,1,10.95-3.3a5.467,5.467,0,0,1-2.13.39H5.88V-18.09H8.43a3.808,3.808,0,0,1,2.4.72,2.429,2.429,0,0,1,.93,2.04,2.57,2.57,0,0,1-.42,1.485,2.688,2.688,0,0,1-1.17.945,4.287,4.287,0,0,1-1.74.33H5.04ZM20.34-21V0H32.22V-3.18H23.88V-21ZM36.42-10.5a8.248,8.248,0,0,1,.525-2.985,7.056,7.056,0,0,1,1.485-2.37,6.749,6.749,0,0,1,2.265-1.56,7.325,7.325,0,0,1,2.9-.555,7.246,7.246,0,0,1,2.865.555,6.749,6.749,0,0,1,2.265,1.56,6.867,6.867,0,0,1,1.47,2.37A8.465,8.465,0,0,1,50.7-10.5a8.248,8.248,0,0,1-.525,2.985,7.056,7.056,0,0,1-1.485,2.37,6.749,6.749,0,0,1-2.265,1.56,7.246,7.246,0,0,1-2.865.555,7.246,7.246,0,0,1-2.865-.555,6.749,6.749,0,0,1-2.265-1.56,7.056,7.056,0,0,1-1.485-2.37A8.248,8.248,0,0,1,36.42-10.5Zm-3.75,0a11.415,11.415,0,0,0,.81,4.335,10.511,10.511,0,0,0,2.28,3.48,10.461,10.461,0,0,0,3.45,2.31A11.2,11.2,0,0,0,43.56.45a11.312,11.312,0,0,0,4.365-.825,10.423,10.423,0,0,0,3.465-2.31,10.511,10.511,0,0,0,2.28-3.48,11.415,11.415,0,0,0,.81-4.335,11.415,11.415,0,0,0-.81-4.335,10.076,10.076,0,0,0-2.295-3.45A10.63,10.63,0,0,0,47.9-20.55a11.415,11.415,0,0,0-4.335-.81,11.3,11.3,0,0,0-4.32.81,10.669,10.669,0,0,0-3.465,2.265,10.076,10.076,0,0,0-2.3,3.45A11.415,11.415,0,0,0,32.67-10.5ZM67.92-7.98h6.45a8.028,8.028,0,0,1-.795,2.01,6.047,6.047,0,0,1-1.35,1.635,6.012,6.012,0,0,1-1.935,1.1,7.576,7.576,0,0,1-2.52.39,7.648,7.648,0,0,1-2.895-.54A6.708,6.708,0,0,1,62.55-4.95a7.264,7.264,0,0,1-1.545-2.43,8.45,8.45,0,0,1-.555-3.12,8.253,8.253,0,0,1,.57-3.12,7.12,7.12,0,0,1,1.56-2.4A6.919,6.919,0,0,1,64.9-17.55a7.567,7.567,0,0,1,2.865-.54,7.205,7.205,0,0,1,3.735.915A6.657,6.657,0,0,1,73.92-14.76l2.88-1.95a9.832,9.832,0,0,0-2.25-2.505,9.763,9.763,0,0,0-3.015-1.59,12.053,12.053,0,0,0-3.765-.555,11.921,11.921,0,0,0-4.395.8,10.482,10.482,0,0,0-3.51,2.235,10.1,10.1,0,0,0-2.31,3.435A11.393,11.393,0,0,0,56.73-10.5a11.693,11.693,0,0,0,.81,4.41,10.2,10.2,0,0,0,2.295,3.48,10.285,10.285,0,0,0,3.5,2.265A11.8,11.8,0,0,0,67.71.45a10.408,10.408,0,0,0,4.47-.915A9.346,9.346,0,0,0,75.45-2.97a10.827,10.827,0,0,0,1.98-3.645,13.066,13.066,0,0,0,.6-4.365H67.92Zm23.7,0h6.45a8.028,8.028,0,0,1-.795,2.01,6.048,6.048,0,0,1-1.35,1.635,6.012,6.012,0,0,1-1.935,1.1,7.576,7.576,0,0,1-2.52.39,7.648,7.648,0,0,1-2.9-.54A6.708,6.708,0,0,1,86.25-4.95a7.264,7.264,0,0,1-1.545-2.43,8.45,8.45,0,0,1-.555-3.12,8.253,8.253,0,0,1,.57-3.12,7.12,7.12,0,0,1,1.56-2.4,6.919,6.919,0,0,1,2.325-1.53,7.567,7.567,0,0,1,2.865-.54,7.205,7.205,0,0,1,3.735.915A6.657,6.657,0,0,1,97.62-14.76l2.88-1.95a9.832,9.832,0,0,0-2.25-2.505,9.763,9.763,0,0,0-3.015-1.59,12.053,12.053,0,0,0-3.765-.555,11.921,11.921,0,0,0-4.4.8,10.482,10.482,0,0,0-3.51,2.235,10.1,10.1,0,0,0-2.31,3.435A11.393,11.393,0,0,0,80.43-10.5a11.693,11.693,0,0,0,.81,4.41,10.2,10.2,0,0,0,2.3,3.48A10.285,10.285,0,0,0,87.03-.345,11.8,11.8,0,0,0,91.41.45a10.408,10.408,0,0,0,4.47-.915A9.346,9.346,0,0,0,99.15-2.97a10.827,10.827,0,0,0,1.98-3.645,13.066,13.066,0,0,0,.6-4.365H91.62ZM107.52,0h10.59V-3.12H107.52Zm0-17.88h10.59V-21H107.52Zm0,8.16h9.99v-3.06h-9.99ZM105.33-21V0h3.48V-21Z'%20data-name='Path%205'%20transform='translate(-2.34%2021.36)'/%3e%3c/svg%3e" alt="logo" />
+      <img class="logo-main" src="images/logo.svg" alt="logo" />
     </a>
     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#mainNav">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
+      <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
     </button>
     <div class="collapse navbar-collapse nav-list" id="mainNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html">홈</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">소개</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">문의</a></li>
       </ul>
       <ul class="main-nav-social">
         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -39,47 +98,23 @@
 </nav>
 
 <!-- ✅ Featured Section -->
-<section class="featured">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <article class="featured-post">
-          <div class="featured-post-content">
-            <div class="featured-post-author">
-              <img src="/assets/author-Dyi9Dx_8.png" alt="author" />
-              <p>By <span>Mary Astor</span></p>
-            </div>
-            <a href="single-blog.html" class="featured-post-title">Every Next Level of Your Life Will Demand</a>
-            <ul class="featured-post-meta">
-              <li><i class="fa fa-clock-o"></i> October 19, 2020 - 3 min read</li>
-            </ul>
-          </div>
-          <div class="featured-post-thumb">
-            <img src="/assets/featured-post-R9Ny_8AX.jpg" alt="feature-post-thumb" />
-          </div>
-        </article>
-      </div>
-    </div>
-  </div>
-</section>
+<section class="featured"></section>
 
 <!-- ✅ Articles + Trending Section -->
 <section class="blog" id="articles-section">
   <div class="container">
     <div class="row">
       <div class="col-lg-8">
-        <div id="articles-list" class="articles-grid">
-          <!-- JS-аар мэдээнүүд энд орж ирнэ -->
-        </div>
+        <div id="articles-list" class="articles-grid"></div>
         <div class="pagination-controls text-center mt-4">
-          <button id="prevPage" class="btn btn-outline-secondary mr-2">← Өмнөх</button>
+          <button id="prevPage" class="btn btn-outline-secondary mr-2">← 이전</button>
           <span id="pagination-info">Page 1</span>
-          <button id="nextPage" class="btn btn-outline-secondary ml-2">Дараах →</button>
+          <button id="nextPage" class="btn btn-outline-secondary ml-2">다음 →</button>
         </div>
       </div>
       <div class="col-lg-4">
         <div class="trending-box">
-          <h3 class="section-title">🔥 Trending Post</h3>
+          <h3 class="section-title">🔥 인기 포스트</h3>
           <div id="trending-posts"></div>
         </div>
       </div>
@@ -87,80 +122,90 @@
   </div>
 </section>
 
-<!-- ❌ Duplicate Trending Removed -->
-
-<!-- ✅ Instagram Feed -->
-<section class="instagram">
-  <a href="#">
-    <i class="fa fa-instagram" aria-hidden="true"></i>
-    <span>@Mary_Astor</span>
-  </a>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="instagram-item">
-          <div class="instagram-item-thum"><img src="/assets/case-studies-1-D3USuA5I.png" alt="image"></div>
-          <div class="instagram-item-thum"><img src="/assets/case-studies-2-D0HW37Ao.png" alt="image"></div>
-          <div class="instagram-item-thum"><img src="/assets/case-studies-3-M0VYoIV7.png" alt="image"></div>
-          <div class="instagram-item-thum"><img src="/assets/case-studies-4-B-dTzA_Q.png" alt="image"></div>
-          <div class="instagram-item-thum"><img src="/assets/case-studies-5-W_k2Ksfg.png" alt="image"></div>
-          <div class="instagram-item-thum"><img src="/assets/case-studies-6-CyU87GMP.png" alt="image"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ✅ Footer -->
-<section class="footer">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-6 mx-auto text-center">
-        <div class="footer-logo">
-          <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='115.77'%20height='21.81'%20viewBox='0%200%20115.77%2021.81'%3e%3cpath%20id='Path_5'%20fill='%23242424'%20d='M5.04-10.83H8.67a9.86,9.86,0,0,0,3.51-.57,5.285,5.285,0,0,0,2.355-1.665,4.183,4.183,0,0,0,.855-2.655,5.312,5.312,0,0,0-.48-2.34,4.279,4.279,0,0,0-1.38-1.635,6.519,6.519,0,0,0-2.13-.975A10.529,10.529,0,0,0,8.67-21H2.34V0H9.03a10.967,10.967,0,0,0,3.915-.645,5.7,5.7,0,0,0,2.67-1.995,5.694,5.694,0,0,0,.975-3.42,5.234,5.234,0,0,0-.6-2.58,4.994,4.994,0,0,0-1.65-1.77,7.616,7.616,0,0,0-2.415-1.02,12.286,12.286,0,0,0-2.9-.33H5.04v1.95H8.82a6.107,6.107,0,0,1,1.65.21,4.036,4.036,0,0,1,1.32.63,2.762,2.762,0,0,1,.87,1.05,3.46,3.46,0,0,1,.3,1.5,3.346,3.346,0,0,1-.54,1.95A3.288,3.288,0,0,1,10.95-3.3a5.467,5.467,0,0,1-2.13.39H5.88V-18.09H8.43a3.808,3.808,0,0,1,2.4.72,2.429,2.429,0,0,1,.93,2.04,2.57,2.57,0,0,1-.42,1.485,2.688,2.688,0,0,1-1.17.945,4.287,4.287,0,0,1-1.74.33H5.04ZM20.34-21V0H32.22V-3.18H23.88V-21ZM36.42-10.5a8.248,8.248,0,0,1,.525-2.985,7.056,7.056,0,0,1,1.485-2.37,6.749,6.749,0,0,1,2.265-1.56,7.325,7.325,0,0,1,2.9-.555,7.246,7.246,0,0,1,2.865.555,6.749,6.749,0,0,1,2.265,1.56,6.867,6.867,0,0,1,1.47,2.37A8.465,8.465,0,0,1,50.7-10.5a8.248,8.248,0,0,1-.525,2.985,7.056,7.056,0,0,1-1.485,2.37,6.749,6.749,0,0,1-2.265,1.56,7.246,7.246,0,0,1-2.865.555,7.246,7.246,0,0,1-2.865-.555,6.749,6.749,0,0,1-2.265-1.56,7.056,7.056,0,0,1-1.485-2.37A8.248,8.248,0,0,1,36.42-10.5Zm-3.75,0a11.415,11.415,0,0,0,.81,4.335,10.511,10.511,0,0,0,2.28,3.48,10.461,10.461,0,0,0,3.45,2.31A11.2,11.2,0,0,0,43.56.45a11.312,11.312,0,0,0,4.365-.825,10.423,10.423,0,0,0,3.465-2.31,10.511,10.511,0,0,0,2.28-3.48,11.415,11.415,0,0,0,.81-4.335,11.415,11.415,0,0,0-.81-4.335,10.076,10.076,0,0,0-2.295-3.45A10.63,10.63,0,0,0,47.9-20.55a11.415,11.415,0,0,0-4.335-.81,11.3,11.3,0,0,0-4.32.81,10.669,10.669,0,0,0-3.465,2.265,10.076,10.076,0,0,0-2.3,3.45A11.415,11.415,0,0,0,32.67-10.5ZM67.92-7.98h6.45a8.028,8.028,0,0,1-.795,2.01,6.047,6.047,0,0,1-1.35,1.635,6.012,6.012,0,0,1-1.935,1.1,7.576,7.576,0,0,1-2.52.39,7.648,7.648,0,0,1-2.895-.54A6.708,6.708,0,0,1,62.55-4.95a7.264,7.264,0,0,1-1.545-2.43,8.45,8.45,0,0,1-.555-3.12,8.253,8.253,0,0,1,.57-3.12,7.12,7.12,0,0,1,1.56-2.4A6.919,6.919,0,0,1,64.9-17.55a7.567,7.567,0,0,1,2.865-.54,7.205,7.205,0,0,1,3.735.915A6.657,6.657,0,0,1,73.92-14.76l2.88-1.95a9.832,9.832,0,0,0-2.25-2.505,9.763,9.763,0,0,0-3.015-1.59,12.053,12.053,0,0,0-3.765-.555,11.921,11.921,0,0,0-4.395.8,10.482,10.482,0,0,0-3.51,2.235,10.1,10.1,0,0,0-2.31,3.435A11.393,11.393,0,0,0,56.73-10.5a11.693,11.693,0,0,0,.81,4.41,10.2,10.2,0,0,0,2.295,3.48,10.285,10.285,0,0,0,3.5,2.265A11.8,11.8,0,0,0,67.71.45a10.408,10.408,0,0,0,4.47-.915A9.346,9.346,0,0,0,75.45-2.97a10.827,10.827,0,0,0,1.98-3.645,13.066,13.066,0,0,0,.6-4.365H67.92Zm23.7,0h6.45a8.028,8.028,0,0,1-.795,2.01,6.048,6.048,0,0,1-1.35,1.635,6.012,6.012,0,0,1-1.935,1.1,7.576,7.576,0,0,1-2.52.39,7.648,7.648,0,0,1-2.9-.54A6.708,6.708,0,0,1,86.25-4.95a7.264,7.264,0,0,1-1.545-2.43,8.45,8.45,0,0,1-.555-3.12,8.253,8.253,0,0,1,.57-3.12,7.12,7.12,0,0,1,1.56-2.4,6.919,6.919,0,0,1,2.325-1.53,7.567,7.567,0,0,1,2.865-.54,7.205,7.205,0,0,1,3.735.915A6.657,6.657,0,0,1,97.62-14.76l2.88-1.95a9.832,9.832,0,0,0-2.25-2.505,9.763,9.763,0,0,0-3.015-1.59,12.053,12.053,0,0,0-3.765-.555,11.921,11.921,0,0,0-4.4.8,10.482,10.482,0,0,0-3.51,2.235,10.1,10.1,0,0,0-2.31,3.435A11.393,11.393,0,0,0,80.43-10.5a11.693,11.693,0,0,0,.81,4.41,10.2,10.2,0,0,0,2.3,3.48A10.285,10.285,0,0,0,87.03-.345,11.8,11.8,0,0,0,91.41.45a10.408,10.408,0,0,0,4.47-.915A9.346,9.346,0,0,0,99.15-2.97a10.827,10.827,0,0,0,1.98-3.645,13.066,13.066,0,0,0,.6-4.365H91.62ZM107.52,0h10.59V-3.12H107.52Zm0-17.88h10.59V-21H107.52Zm0,8.16h9.99v-3.06h-9.99ZM105.33-21V0h3.48V-21Z'%20data-name='Path%205'%20transform='translate(-2.34%2021.36)'/%3e%3c/svg%3e" alt="logo" />
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6 mx-auto">
-        <div class="footer-nav">
-          <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6 mx-auto">
-        <div class="sociale-icon">
-          <ul>
-            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="copy-right">
-          <p>© <span id="copyrightYear"></span> - Бүх эрх хуулиар хамгаалагдсан. Загвар: <a href="https://staticmania.com/">StaticMania</a> & <a href="https://themewagon.com/">ThemeWagon</a></p>
-        </div>
-      </div>
-    </div>
+<footer class="footer">
+  <div class="container-fluid text-center">
+    <div><img src="images/logo.svg" alt="logo" class="footer-logo" /></div>
+    <ul class="navbar-nav d-inline-flex justify-content-center my-2">
+      <li class="nav-item"><a class="nav-link" href="index.html">홈</a></li>
+      <li class="nav-item"><a class="nav-link" href="about.html">소개</a></li>
+      <li class="nav-item"><a class="nav-link" href="contact.html">문의</a></li>
+    </ul>
+    <ul class="sociale-icon d-inline-flex justify-content-center">
+      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+      <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+    </ul>
+    <p class="copy-right mt-3">© <span id="copyrightYear"></span> - 모든 권리 보유. Theme by <a href="https://staticmania.com/">StaticMania</a> & <a href="https://themewagon.com/">ThemeWagon</a></p>
   </div>
-</section>
+</footer>
 
 <!-- ✅ Scripts -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=geometry"></script>
 <script src="vendor/jQuery/jquery.min.js"></script>
 <script src="vendor/bootstrap/bootstrap.min.js"></script>
 <script src="vendor/slick/slick.min.js"></script>
-<script src="vendor/g-map/gmap.js"></script>
 <script src="js/script.js"></script>
+
+<!-- ✅ 뉴스 렌더링 스크립트 -->
+<script>
+  const perPage = 10;
+  let currentPage = 1;
+  let articles = [];
+
+  async function loadArticles() {
+    try {
+      const res = await fetch('/posts/index.json');
+      articles = await res.json();
+      renderPage();
+    } catch {
+      document.getElementById('articles-list').innerHTML = '<p>뉴스를 불러오는 데 실패했습니다.</p>';
+    }
+  }
+
+  function renderPage() {
+    const container = document.getElementById('articles-list');
+    container.innerHTML = '';
+
+    const start = (currentPage - 1) * perPage;
+    const end = start + perPage;
+    const visible = articles.slice(start, end);
+
+    visible.forEach(post => {
+      const card = document.createElement('a');
+      card.className = 'article-card';
+      card.href = `single-blog.html?slug=${post.slug}`;
+      card.innerHTML = `
+        <img src="${post.thumbnail || '/images/default.jpg'}" alt="${post.title}" class="article-image">
+        <div class="article-content">
+          <h4>${post.title}</h4>
+          <small>${post.date || ''}</small>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    document.getElementById('pagination-info').textContent = `Page ${currentPage}`;
+  }
+
+  document.getElementById('prevPage').addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderPage();
+    }
+  });
+
+  document.getElementById('nextPage').addEventListener('click', () => {
+    if ((currentPage * perPage) < articles.length) {
+      currentPage++;
+      renderPage();
+    }
+  });
+
+  loadArticles();
+</script>
 
 </body>
 </html>
+
+
+
