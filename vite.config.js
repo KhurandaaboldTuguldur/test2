@@ -1,14 +1,20 @@
 import { defineConfig } from 'vite';
-import { copyFileSync, mkdirSync, readdirSync } from 'fs';
+import { copyFileSync, mkdirSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
-// ✅ .md 파일을 public/posts → dist/posts 로 복사하는 플러그인
+// ✅ .md 파일을 posts/ → dist/posts 로 복사하는 플러그인
 function copyMarkdownPlugin() {
   return {
     name: 'copy-md-to-dist',
     closeBundle() {
-      const srcDir = 'public/posts';
+      const srcDir = 'posts';              // 🔧 원본 위치 변경
       const destDir = 'dist/posts';
+
+      if (!existsSync(srcDir)) {
+        console.warn(`⚠️ ${srcDir} 디렉터리가 존재하지 않습니다.`);
+        return;
+      }
+
       mkdirSync(destDir, { recursive: true });
       for (const file of readdirSync(srcDir)) {
         if (file.endsWith('.md')) {
@@ -21,18 +27,17 @@ function copyMarkdownPlugin() {
 }
 
 export default defineConfig({
-  publicDir: 'public',           // 정적 자산 폴더 설정
+  publicDir: false, // 🔧 public 폴더를 사용하지 않으므로 false 처리
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      // ✅ index.html 외에도 single-blog.html 명시적으로 포함
       input: {
         main: 'index.html',
         single: 'single-blog.html'
       }
     }
   },
-  assetsInclude: ['**/*.md'],    // .md 파일도 빌드 대상에 포함
-  plugins: [copyMarkdownPlugin()] // ✅ .md 파일 복사 플러그인 등록
+  assetsInclude: ['**/*.md'],
+  plugins: [copyMarkdownPlugin()]
 });
