@@ -94,7 +94,8 @@ $(document).ready(function () {
 function createBlogCard(post, isTrending = false, slug = "") {
   // ✅ 슬래시(/)로 시작하는 경로 제거
   const rawThumbnail = (post.thumbnail || "").replace(/^\/+/, "");
-  const thumbnail = rawThumbnail || "images/default-thumbnail.jpg";
+  const thumbnail = "/" + rawThumbnail || "/images/default-thumbnail.jpg";
+
   const title = post.title || "제목 없음";
   const description = post.description || "";
   const date = post.date || "";

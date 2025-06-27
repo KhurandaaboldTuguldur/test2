@@ -35,7 +35,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        single: 'single-blog.html'
+        single: 'single-blog.html',
+        admin: 'admin/index.html'
       }
     }
   },
