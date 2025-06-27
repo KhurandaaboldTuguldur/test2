@@ -29,8 +29,6 @@ fs.readdirSync(postsDir).forEach((file) => {
         description: data.description,
         date: data.date,
         thumbnail: `images/uploads/${path.basename(data.thumbnail || "")}`,
-
-
         slug: slug
       });
     } else {
