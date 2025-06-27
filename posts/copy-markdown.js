@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const srcDir = path.join(__dirname, 'posts');
-const destDir = path.join(__dirname, 'public', 'posts');
+const destDir = path.join(__dirname, 'dist', 'posts');
 
 fs.mkdirSync(destDir, { recursive: true });
 
