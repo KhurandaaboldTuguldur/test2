@@ -7,7 +7,7 @@
   <link href="css/style.css" rel="stylesheet" />
 </head>
 <body>
-  <!-- ✅ 상단 로고 또는 네비게이션 (선택사항) -->
+  <!-- ✅ 상단 네비게이션 -->
   <nav>
     <a href="index.html">← 홈으로</a>
   </nav>
@@ -37,24 +37,40 @@
     const wrapper = document.getElementById("post-wrapper");
 
     function showError(message) {
-      wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">홈으로</a></p>`;
+      wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">← 홈으로</a></p>`;
+    }
+
+    function formatDate(dateStr) {
+      try {
+        return new Date(dateStr).toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        });
+      } catch {
+        return dateStr;
+      }
     }
 
     function renderPost(md) {
-      if (typeof window.frontMatter !== "object" || typeof window.marked !== "function") {
-        showError("❗ 필수 라이브러리가 로드되지 않았습니다.");
+      if (!window.frontMatter || typeof marked !== "function") {
+        showError("❗ 필수 라이브러리가 제대로 로드되지 않았습니다.");
         return;
       }
 
-      const parsed = window.frontMatter(md);
-      const html = window.marked.parse(parsed.body);
+      const parsed = frontMatter(md);
       const fm = parsed.attributes;
+      const html = marked.parse(parsed.body);
+
+      // 썸네일 경로 보정
+      const rawThumb = (fm.thumbnail || "").replace(/^\/+|\/+$/g, "");
+      const thumbnail = rawThumb.startsWith("http") ? rawThumb : "/" + rawThumb;
 
       wrapper.innerHTML = `
         <article class="blog-post">
           <h1>${fm.title || slug}</h1>
-          ${fm.date ? `<p><em>${new Date(fm.date).toLocaleDateString()}</em></p>` : ""}
-          ${fm.thumbnail ? `<img src="${fm.thumbnail}" alt="${fm.title || '썸네일'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
+          ${fm.date ? `<p><em>${formatDate(fm.date)}</em></p>` : ""}
+          ${fm.thumbnail ? `<img src="${thumbnail}" alt="${fm.title || '썸네일'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
           <div class="post-content">${html}</div>
         </article>
       `;
@@ -66,10 +82,10 @@
           if (!res.ok) throw new Error("❗ 포스트를 찾을 수 없습니다.");
           return res.text();
         })
-        .then(md => renderPost(md))
+        .then(renderPost)
         .catch(err => {
           console.error("⚠️ 에러:", err);
-          showError("🚫 해당 포스트를 불러올 수 없습니다.");
+          showError("🚫 해당 포스트를 불러올 수 없습니다. 파일 경로를 다시 확인하세요.");
         });
     }
 

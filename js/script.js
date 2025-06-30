@@ -34,30 +34,44 @@ $(document).ready(function () {
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
 
-  function renderPosts(page) {
-    if (!articleList || !trendingList) return;
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+  }
 
-    articleList.innerHTML = "";
-    trendingList.innerHTML = "";
+  function renderPosts(page) {
+    if (!articleList) return;
+
+    articleList.innerHTML = "<p>⏳ 뉴스 불러오는 중...</p>";
+    trendingList && (trendingList.innerHTML = "");
 
     const start = (page - 1) * postsPerPage;
     const end = start + postsPerPage;
     const visible = postsData.slice(start, end);
+
+    articleList.innerHTML = "";
 
     visible.forEach((post, idx) => {
       const slug = post.slug || `post-${start + idx + 1}`;
       articleList.insertAdjacentHTML("beforeend", createBlogCard(post, false, slug));
     });
 
-    postsData.slice(0, 3).forEach((post, idx) => {
-      const slug = post.slug || `post-${idx + 1}`;
-      trendingList.insertAdjacentHTML("beforeend", createBlogCard(post, true, slug));
-    });
+    if (trendingList) {
+      const topTrending = postsData.slice(0, 3);
+      topTrending.forEach((post, idx) => {
+        const slug = post.slug || `post-${idx + 1}`;
+        trendingList.insertAdjacentHTML("beforeend", createBlogCard(post, true, slug));
+      });
+    }
 
     const totalPages = Math.ceil(postsData.length / postsPerPage);
-    if (paginationInfo) paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-    if (prevBtn) prevBtn.disabled = currentPage === 1;
-    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+    paginationInfo && (paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`);
+    prevBtn && (prevBtn.disabled = currentPage === 1);
+    nextBtn && (nextBtn.disabled = currentPage === totalPages);
   }
 
   function changePage(offset) {
@@ -87,23 +101,22 @@ $(document).ready(function () {
       articleList.innerHTML = `<p style="color:red">뉴스를 불러오지 못했습니다.<br>파일 경로나 JSON 형식을 확인하세요.</p>`;
     });
 
-  if (prevBtn) prevBtn.addEventListener("click", () => changePage(-1));
-  if (nextBtn) nextBtn.addEventListener("click", () => changePage(1));
+  prevBtn?.addEventListener("click", () => changePage(-1));
+  nextBtn?.addEventListener("click", () => changePage(1));
 });
 
 function createBlogCard(post, isTrending = false, slug = "") {
   const cleanedPath = (post.thumbnail || "").replace(/^\/+|\/+$/g, '');
-  const thumbnail = cleanedPath || "images/default-thumbnail.jpg";
-
+  const thumbnail = cleanedPath.startsWith("http") ? cleanedPath : "/" + cleanedPath;
   const title = post.title || "제목 없음";
   const description = post.description || "";
-  const date = post.date || "";
+  const dateStr = post.date ? formatDate(post.date) : "";
 
   if (isTrending) {
     return `
       <div class="trending-item">
         <img src="${thumbnail}" alt="${title}" loading="lazy">
-        <div><p>${title}</p><small>${date}</small></div>
+        <div><p>${title}</p><small>${dateStr}</small></div>
       </div>
     `;
   }

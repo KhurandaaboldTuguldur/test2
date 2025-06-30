@@ -9,7 +9,7 @@
   <link href="css/style.css" rel="stylesheet" />
   <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon" />
 
-  <!-- ✅ 카드 및 이미지 스타일 추가 -->
+  <!-- ✅ 카드 및 이미지 스타일 -->
   <style>
     .articles-grid {
       display: grid;
@@ -147,66 +147,5 @@
 <script src="vendor/slick/slick.min.js"></script>
 <script src="js/script.js"></script>
 
-<!-- ✅ 뉴스 렌더링 스크립트 -->
-<script>
-  const perPage = 10;
-  let currentPage = 1;
-  let articles = [];
-
-  async function loadArticles() {
-    try {
-      const res = await fetch('/posts/index.json');
-      articles = await res.json();
-      renderPage();
-    } catch {
-      document.getElementById('articles-list').innerHTML = '<p>뉴스를 불러오는 데 실패했습니다.</p>';
-    }
-  }
-
-  function renderPage() {
-    const container = document.getElementById('articles-list');
-    container.innerHTML = '';
-
-    const start = (currentPage - 1) * perPage;
-    const end = start + perPage;
-    const visible = articles.slice(start, end);
-
-    visible.forEach(post => {
-      const card = document.createElement('a');
-      card.className = 'article-card';
-      card.href = `single-blog.html?slug=${post.slug}`;
-      card.innerHTML = `
-        <img src="${post.thumbnail || '/images/default.jpg'}" alt="${post.title}" class="article-image">
-        <div class="article-content">
-          <h4>${post.title}</h4>
-          <small>${post.date || ''}</small>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-
-    document.getElementById('pagination-info').textContent = `Page ${currentPage}`;
-  }
-
-  document.getElementById('prevPage').addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderPage();
-    }
-  });
-
-  document.getElementById('nextPage').addEventListener('click', () => {
-    if ((currentPage * perPage) < articles.length) {
-      currentPage++;
-      renderPage();
-    }
-  });
-
-  loadArticles();
-</script>
-
 </body>
 </html>
-
-
-
