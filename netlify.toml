@@ -1,0 +1,6 @@
+[build]
+  command = "npm run generate"
+  publish = "."
+
+[functions]
+  node_bundler = "esbuild"

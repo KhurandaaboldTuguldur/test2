@@ -1,0 +1,13 @@
+{
+  "name": "blogge-index-generator",
+  "version": "1.0.0",
+  "description": "Netlify 뉴스 index.json 자동 생성기",
+  "type": "module",
+  "main": "generate-index.js",
+  "scripts": {
+    "generate": "node generate-index.js"
+  },
+  "dependencies": {
+    "front-matter": "^4.0.2"
+  }
+}
