@@ -93,7 +93,8 @@ $(document).ready(function () {
 
 function createBlogCard(post, isTrending = false, slug = "") {
   // 썸네일 경로 정리: 슬래시 제거 후 기본값 처리
-  const thumbnail = cleanedPath ? `./images/uploads/${cleanedPath.split("/").pop()}` : "./images/default-thumbnail.jpg";
+  const cleanedPath = somePath.replace(/^\/+|\/+$/g, '');
+
 
 
 
