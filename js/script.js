@@ -92,11 +92,8 @@ $(document).ready(function () {
 });
 
 function createBlogCard(post, isTrending = false, slug = "") {
-  // 썸네일 경로 정리: 슬래시 제거 후 기본값 처리
-  const cleanedPath = somePath.replace(/^\/+|\/+$/g, '');
-
-
-
+  const cleanedPath = (post.thumbnail || "").replace(/^\/+|\/+$/g, '');
+  const thumbnail = cleanedPath || "images/default-thumbnail.jpg";
 
   const title = post.title || "제목 없음";
   const description = post.description || "";
