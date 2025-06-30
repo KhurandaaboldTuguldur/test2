@@ -29,7 +29,7 @@ function copyMarkdownPlugin() {
 export default defineConfig({
   base: './',
   assetsInclude: ['**/*.md', '**/*.jpg', '**/*.png', '**/*.jpeg'],
-  publicDir: 'public',
+  publicDir: 'dist',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
