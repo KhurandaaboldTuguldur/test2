@@ -34,18 +34,7 @@ $(document).ready(function () {
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
 
-  function formatDate(dateStr) {
-  try {
-    return new Date(dateStr).toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    });
-  } catch {
-    return dateStr;
-  }
-}
-
+  
 
 
   function renderPosts(page) {
@@ -109,6 +98,19 @@ $(document).ready(function () {
   prevBtn?.addEventListener("click", () => changePage(-1));
   nextBtn?.addEventListener("click", () => changePage(1));
 });
+
+function formatDate(dateStr) {
+  try {
+    return new Date(dateStr).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
 
 function createBlogCard(post, isTrending = false, slug = "") {
   const cleanedPath = (post.thumbnail || "").replace(/^\/+|\/+$/g, '');
