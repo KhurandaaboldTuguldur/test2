@@ -35,13 +35,17 @@ $(document).ready(function () {
   const nextBtn = document.getElementById("nextPage");
 
   function formatDate(dateStr) {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("ko-KR", {
+  try {
+    return new Date(dateStr).toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit"
     });
+  } catch {
+    return dateStr;
   }
+}
+
 
   function renderPosts(page) {
     if (!articleList) return;
