@@ -47,6 +47,7 @@ $(document).ready(function () {
 }
 
 
+
   function renderPosts(page) {
     if (!articleList) return;
 
