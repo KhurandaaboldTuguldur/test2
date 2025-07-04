@@ -146,6 +146,141 @@
 <script src="vendor/bootstrap/bootstrap.min.js"></script>
 <script src="vendor/slick/slick.min.js"></script>
 <script src="js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const postsPerPage = 10;
+  let currentPage = 1;
+  let allPosts = [];
+
+  function parseFrontmatter(md) {
+    const match = md.match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/);
+    if (!match) return { data: {}, content: md };
+
+    const raw = match[1];
+    const content = match[2];
+    const data = {};
+
+    raw.split('\n').forEach(line => {
+      const [key, ...rest] = line.split(':');
+      if (key && rest.length > 0) {
+        data[key.trim()] = rest.join(':').trim();
+      }
+    });
+
+    return { data, content };
+  }
+
+  function formatDate(dateStr) {
+    try {
+      return new Date(dateStr).toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+    } catch {
+      return dateStr;
+    }
+  }
+
+  function renderArticles() {
+    const list = document.getElementById("articles-list");
+    list.innerHTML = "";
+
+    const start = (currentPage - 1) * postsPerPage;
+    const end = start + postsPerPage;
+
+    const pagePosts = allPosts.slice(start, end);
+    pagePosts.forEach(post => {
+      const html = `
+        <a class="article-card" href="single-blog.html?slug=${post.slug}">
+          <img src="${post.thumbnail}" class="article-image" alt="썸네일" />
+          <div class="article-content">
+            <h4>${post.title}</h4>
+            <small>${formatDate(post.date)}</small>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">${post.description}</p>
+          </div>
+        </a>
+      `;
+      list.insertAdjacentHTML("beforeend", html);
+    });
+
+    document.getElementById("pagination-info").textContent = `Page ${currentPage}`;
+  }
+
+  function loadPosts() {
+    fetch("./posts/") // 이 부분은 Netlify에서는 작동 X → 아래 참고
+      .then(res => res.text())
+      .then(html => {
+        // ✅ .md 파일 목록 파싱
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const links = [...doc.querySelectorAll("a")]
+          .map(a => a.getAttribute("href"))
+          .filter(href => href.endsWith(".md"));
+
+        return Promise.all(links.map(file =>
+          fetch(`./posts/${file}`)
+            .then(res => res.text())
+            .then(text => {
+              const parsed = parseFrontmatter(text);
+              const data = parsed.data;
+              return {
+                slug: file.replace(".md", ""),
+                title: data.title || file,
+                date: data.date || "",
+                thumbnail: (data.thumbnail || "").replace(/^\/+|\/+$/g, "").startsWith("http") ? data.thumbnail : "/"+(data.thumbnail || ""),
+                description: data.description || "",
+              };
+            })
+        ));
+      })
+      .then(posts => {
+        // ✅ 최신순 정렬
+        allPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        renderArticles();
+        renderTrending(posts.slice(0, 5));
+      })
+      .catch(err => {
+        console.error("포스트 불러오기 실패", err);
+        document.getElementById("articles-list").innerHTML = `<p>❗ 게시글을 불러오지 못했습니다.</p>`;
+      });
+  }
+
+  function renderTrending(posts) {
+    const container = document.getElementById("trending-posts");
+    container.innerHTML = posts.map(post => `
+      <a href="single-blog.html?slug=${post.slug}" style="display:block; margin-bottom: 1rem;">
+        <strong style="display:block;">${post.title}</strong>
+        <small>${formatDate(post.date)}</small>
+      </a>
+    `).join("");
+  }
+
+  // ✅ Pagination Events
+  document.getElementById("prevPage").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderArticles();
+    }
+  });
+
+  document.getElementById("nextPage").addEventListener("click", () => {
+    const maxPage = Math.ceil(allPosts.length / postsPerPage);
+    if (currentPage < maxPage) {
+      currentPage++;
+      renderArticles();
+    }
+  });
+
+  // ✅ Init
+  document.addEventListener("DOMContentLoaded", () => {
+    const yearEl = document.getElementById("copyrightYear");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    loadPosts();
+  });
+</script>
+
 
 </body>
 </html>
