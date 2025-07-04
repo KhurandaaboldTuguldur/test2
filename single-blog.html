@@ -1,11 +1,12 @@
-<!-- ✅ 필수 라이브러리 -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
+<!-- ✅ Google Sheets 기반 single-blog -->
 <script>
   const slug = new URLSearchParams(window.location.search).get("slug");
   const wrapper = document.getElementById("post-wrapper");
   const yearEl = document.getElementById("year") || document.getElementById("copyrightYear");
   if (yearEl) yearEl.innerText = new Date().getFullYear();
+
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQSwlZG2zaEmRX3_7fciFUcf3Vdj7leAeQ6ActLCYrEybvOtctHAnkPJZYklIVvayyJAeWeCY408dec/pub?output=csv";
+
 
   function showError(msg) {
     wrapper.innerHTML = `<p style="color:red">${msg} <a href="index.html">← 홈으로</a></p>`;
@@ -23,61 +24,45 @@
     }
   }
 
-  function parseFrontmatter(md) {
-    const match = md.match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/);
-    if (!match) return { data: {}, content: md };
-
-    const raw = match[1];
-    const content = match[2];
-    const data = {};
-    raw.split('\n').forEach(line => {
-      const [key, ...rest] = line.split(':');
-      if (key && rest.length > 0) {
-        data[key.trim()] = rest.join(':').trim();
-      }
-    });
-    return { data, content };
-  }
-
-  function renderPost(md) {
-    if (typeof marked !== "function") {
-      showError("❗ marked 라이브러리가 로드되지 않았습니다.");
-      return;
-    }
-
-    const parsed = parseFrontmatter(md); // ✅ 대체된 parser
-    const fm = parsed.data;
-    const html = marked.parse(parsed.content);
-
-    const rawThumb = (fm.thumbnail || "").replace(/^\/+|\/+$/g, "");
-    const thumbnail = rawThumb.startsWith("http") ? rawThumb : "/" + rawThumb;
+  function renderPost(data) {
+    const thumb = (data.thumbnail || "").replace(/^\/|\/$/g, "");
+    const thumbnail = thumb.startsWith("http") ? thumb : "/" + thumb;
 
     wrapper.innerHTML = `
       <article class="blog-post">
-        <h1>${fm.title || slug}</h1>
-        ${fm.date ? `<p><em>${formatDate(fm.date)}</em></p>` : ""}
-        ${fm.thumbnail ? `<img src="${thumbnail}" alt="썸네일" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
-        <div class="post-content">${html}</div>
+        <h1>${data.title || slug}</h1>
+        ${data.date ? `<p><em>${formatDate(data.date)}</em></p>` : ""}
+        ${data.thumbnail ? `<img src="${thumbnail}" alt="썸네일" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
+        <div class="post-content">
+          ${data.body ? marked.parse(data.body) : "<p>내용 없음</p>"}
+        </div>
       </article>
     `;
-  }
-
-  function fetchPost(slug) {
-    fetch(`./posts/${slug}.md`)
-      .then(res => {
-        if (!res.ok) throw new Error("❗ 포스트를 찾을 수 없습니다.");
-        return res.text();
-      })
-      .then(renderPost)
-      .catch(err => {
-        console.error("⚠️", err);
-        showError("🚫 해당 포스트를 불러올 수 없습니다. 파일 경로를 다시 확인하세요.");
-      });
   }
 
   if (!slug) {
     showError("❗ URL에 slug 파라미터가 없습니다.");
   } else {
-    fetchPost(slug);
+    fetch("https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js")
+      .then(() => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+        script.onload = () => {
+          fetch(sheetUrl)
+            .then(res => res.text())
+            .then(csv => {
+              const parsed = Papa.parse(csv, { header: true });
+              const rows = parsed.data;
+              const post = rows.find(r => (r.slug || "").trim() === slug);
+              if (post) {
+                renderPost(post);
+              } else {
+                showError("❌ 해당 슬러그에 해당하는 뉴스가 없습니다.");
+              }
+            })
+            .catch(() => showError("⚠️ 데이터를 가져오는 중 오류 발생"));
+        };
+        document.body.appendChild(script);
+      });
   }
 </script>

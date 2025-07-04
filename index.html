@@ -2,33 +2,16 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <base href="/" />
   <title>Blogge | Personal Blog Site</title>
-  <meta name="robots" content="noindex, nofollow, noimageindex">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="css/style.css" rel="stylesheet" />
   <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon" />
-
-  <!-- ✅ 카드 및 이미지 스타일 -->
   <style>
     .articles-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px;
     }
-
-    @media (max-width: 992px) {
-      .articles-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .articles-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
     .article-card {
       display: flex;
       flex-direction: column;
@@ -41,29 +24,24 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
       transition: 0.2s ease-in-out;
     }
-
     .article-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-
     .article-image {
       width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
       display: block;
     }
-
     .article-content {
       padding: 12px 16px;
     }
-
     .article-card h4 {
       margin: 0;
       font-size: 1rem;
       font-weight: 600;
     }
-
     .article-card small {
       color: #888;
       font-size: 0.85rem;
@@ -74,101 +52,21 @@
 </head>
 <body>
 
-<!-- ✅ Navbar -->
-<nav class="main-nav navbar navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand" href="index.html">
-      <img class="logo-main" src="images/logo.svg" alt="logo" />
-    </a>
-    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#mainNav">
-      <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-    </button>
-    <div class="collapse navbar-collapse nav-list" id="mainNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">홈</a></li>
-        <li class="nav-item"><a class="nav-link" href="about.html">소개</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">문의</a></li>
-      </ul>
-      <ul class="main-nav-social">
-        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<!-- ✅ Navbar 생략 가능 -->
 
-<!-- ✅ Featured Section -->
-<section class="featured"></section>
+<h1 style="text-align:center; margin-top:2rem">📰 Google Sheets 뉴스</h1>
+<div id="articles-list" class="articles-grid" style="padding:2rem"></div>
 
-<!-- ✅ Articles + Trending Section -->
-<section class="blog" id="articles-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8">
-        <div id="articles-list" class="articles-grid"></div>
-        <div class="pagination-controls text-center mt-4">
-          <button id="prevPage" class="btn btn-outline-secondary mr-2">← 이전</button>
-          <span id="pagination-info">Page 1</span>
-          <button id="nextPage" class="btn btn-outline-secondary ml-2">다음 →</button>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="trending-box">
-          <h3 class="section-title">🔥 인기 포스트</h3>
-          <div id="trending-posts"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<h2 style="text-align:center; margin-top:3rem">🔥 인기 뉴스</h2>
+<div id="trending-posts" style="padding:1rem 2rem"></div>
 
-<!-- ✅ Footer -->
-<footer class="footer">
-  <div class="container-fluid text-center">
-    <div><img src="images/logo.svg" alt="logo" class="footer-logo" /></div>
-    <ul class="navbar-nav d-inline-flex justify-content-center my-2">
-      <li class="nav-item"><a class="nav-link" href="index.html">홈</a></li>
-      <li class="nav-item"><a class="nav-link" href="about.html">소개</a></li>
-      <li class="nav-item"><a class="nav-link" href="contact.html">문의</a></li>
-    </ul>
-    <ul class="sociale-icon d-inline-flex justify-content-center">
-      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-      <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-    </ul>
-    <p class="copy-right mt-3">© <span id="copyrightYear"></span> - 모든 권리 보유. Theme by <a href="https://staticmania.com/">StaticMania</a> & <a href="https://themewagon.com/">ThemeWagon</a></p>
-  </div>
-</footer>
-
-<!-- ✅ Scripts -->
-<script src="vendor/jQuery/jquery.min.js"></script>
-<script src="vendor/bootstrap/bootstrap.min.js"></script>
-<script src="vendor/slick/slick.min.js"></script>
-<script src="js/script.js"></script>
+<!-- ✅ PapaParse CSV 파서 -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
 <script>
-  const postsPerPage = 10;
-  let currentPage = 1;
-  let allPosts = [];
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQSwlZG2zaEmRX3_7fciFUcf3Vdj7leAeQ6ActLCYrEybvOtctHAnkPJZYklIVvayyJAeWeCY408dec/pub?output=csv";
 
-  function parseFrontmatter(md) {
-    const match = md.match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/);
-    if (!match) return { data: {}, content: md };
-
-    const raw = match[1];
-    const content = match[2];
-    const data = {};
-
-    raw.split('\n').forEach(line => {
-      const [key, ...rest] = line.split(':');
-      if (key && rest.length > 0) {
-        data[key.trim()] = rest.join(':').trim();
-      }
-    });
-
-    return { data, content };
-  }
 
   function formatDate(dateStr) {
     try {
@@ -182,105 +80,48 @@
     }
   }
 
-  function renderArticles() {
-    const list = document.getElementById("articles-list");
-    list.innerHTML = "";
-
-    const start = (currentPage - 1) * postsPerPage;
-    const end = start + postsPerPage;
-
-    const pagePosts = allPosts.slice(start, end);
-    pagePosts.forEach(post => {
-      const html = `
-        <a class="article-card" href="single-blog.html?slug=${post.slug}">
-          <img src="${post.thumbnail}" class="article-image" alt="썸네일" />
+  function renderCards(data) {
+    const container = document.getElementById("articles-list");
+    container.innerHTML = "";
+    data.forEach(post => {
+      const card = `
+        <div class="article-card">
+          <img src="${post.thumbnail}" class="article-image" />
           <div class="article-content">
             <h4>${post.title}</h4>
             <small>${formatDate(post.date)}</small>
-            <p style="font-size: 0.9rem; margin-top: 0.5rem;">${post.description}</p>
+            <p style="margin-top:8px;font-size:0.9rem;">${post.description}</p>
           </div>
-        </a>
+        </div>
       `;
-      list.insertAdjacentHTML("beforeend", html);
+      container.insertAdjacentHTML("beforeend", card);
     });
-
-    document.getElementById("pagination-info").textContent = `Page ${currentPage}`;
   }
 
-  function loadPosts() {
-    fetch("./posts/") // 이 부분은 Netlify에서는 작동 X → 아래 참고
-      .then(res => res.text())
-      .then(html => {
-        // ✅ .md 파일 목록 파싱
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const links = [...doc.querySelectorAll("a")]
-          .map(a => a.getAttribute("href"))
-          .filter(href => href.endsWith(".md"));
-
-        return Promise.all(links.map(file =>
-          fetch(`./posts/${file}`)
-            .then(res => res.text())
-            .then(text => {
-              const parsed = parseFrontmatter(text);
-              const data = parsed.data;
-              return {
-                slug: file.replace(".md", ""),
-                title: data.title || file,
-                date: data.date || "",
-                thumbnail: (data.thumbnail || "").replace(/^\/+|\/+$/g, "").startsWith("http") ? data.thumbnail : "/"+(data.thumbnail || ""),
-                description: data.description || "",
-              };
-            })
-        ));
-      })
-      .then(posts => {
-        // ✅ 최신순 정렬
-        allPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-        renderArticles();
-        renderTrending(posts.slice(0, 5));
-      })
-      .catch(err => {
-        console.error("포스트 불러오기 실패", err);
-        document.getElementById("articles-list").innerHTML = `<p>❗ 게시글을 불러오지 못했습니다.</p>`;
-      });
-  }
-
-  function renderTrending(posts) {
+  function renderTrending(data) {
     const container = document.getElementById("trending-posts");
-    container.innerHTML = posts.map(post => `
-      <a href="single-blog.html?slug=${post.slug}" style="display:block; margin-bottom: 1rem;">
-        <strong style="display:block;">${post.title}</strong>
+    container.innerHTML = data.slice(0, 3).map(post => `
+      <p style="margin-bottom:1rem">
+        <strong>${post.title}</strong><br>
         <small>${formatDate(post.date)}</small>
-      </a>
+      </p>
     `).join("");
   }
 
-  // ✅ Pagination Events
-  document.getElementById("prevPage").addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderArticles();
-    }
-  });
-
-  document.getElementById("nextPage").addEventListener("click", () => {
-    const maxPage = Math.ceil(allPosts.length / postsPerPage);
-    if (currentPage < maxPage) {
-      currentPage++;
-      renderArticles();
-    }
-  });
-
-  // ✅ Init
-  document.addEventListener("DOMContentLoaded", () => {
-    const yearEl = document.getElementById("copyrightYear");
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-    loadPosts();
-  });
+  fetch(sheetUrl)
+    .then(res => res.text())
+    .then(csv => {
+      const parsed = Papa.parse(csv, { header: true });
+      const newsList = parsed.data.filter(p => p.title && p.date);
+      const sorted = newsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+      renderCards(sorted);
+      renderTrending(sorted);
+    })
+    .catch(err => {
+      console.error("❗ 데이터 로딩 오류:", err);
+      document.getElementById("articles-list").innerHTML = "<p>❌ 데이터를 불러올 수 없습니다.</p>";
+    });
 </script>
-
 
 </body>
 </html>
