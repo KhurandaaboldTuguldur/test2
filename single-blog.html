@@ -60,81 +60,71 @@
     </div>
   </footer>
 
-  <!-- ✅ 필수 라이브러리 -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://unpkg.com/front-matter@4.0.2/dist/front-matter.min.js"></script>
+<!-- ✅ 필수 라이브러리 -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gray-matter@4.0.3/dist/gray-matter.min.js"></script>
 
-  <!-- ✅ 마크다운 렌더링 스크립트 -->
-  <script>
-    // 연도 자동 적용
-    const yEl = document.getElementById("year") || document.getElementById("copyrightYear");
-    if (yEl) yEl.innerText = new Date().getFullYear();
+<script>
+  const slug = new URLSearchParams(window.location.search).get("slug");
+  const wrapper = document.getElementById("post-wrapper");
+  const yearEl = document.getElementById("year") || document.getElementById("copyrightYear");
+  if (yearEl) yearEl.innerText = new Date().getFullYear();
 
-    const slug = new URLSearchParams(window.location.search).get("slug");
-    const wrapper = document.getElementById("post-wrapper");
+  function showError(msg) {
+    wrapper.innerHTML = `<p style="color:red">${msg} <a href="index.html">← 홈으로</a></p>`;
+  }
 
-    function showError(message) {
-      wrapper.innerHTML = `<p style="color:red">${message} <a href="index.html">← 홈으로</a></p>`;
+  function formatDate(dateStr) {
+    try {
+      return new Date(dateStr).toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+    } catch {
+      return dateStr;
+    }
+  }
+
+  function renderPost(md) {
+    if (!window.matter || typeof marked !== "function") {
+      showError("❗ 필수 라이브러리가 제대로 로드되지 않았습니다.");
+      return;
     }
 
-    function formatDate(dateStr) {
-      try {
-        return new Date(dateStr).toLocaleDateString("ko-KR", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit"
-        });
-      } catch {
-        return dateStr;
-      }
-    }
+    const parsed = window.matter(md); // ✅ gray-matter 사용
+    const fm = parsed.data;
+    const html = marked.parse(parsed.content);
 
-    function renderPost(md) {
-      if (!window.frontMatter || typeof marked !== "function") {
-        showError("❗ 필수 라이브러리가 제대로 로드되지 않았습니다.");
-        return;
-      }
+    const rawThumb = (fm.thumbnail || "").replace(/^\/+|\/+$/g, "");
+    const thumbnail = rawThumb.startsWith("http") ? rawThumb : "/" + rawThumb;
 
-      const parsed = frontMatter(md);
-      const fm = parsed.attributes;
-      const html = marked.parse(parsed.body);
+    wrapper.innerHTML = `
+      <article class="blog-post">
+        <h1>${fm.title || slug}</h1>
+        ${fm.date ? `<p><em>${formatDate(fm.date)}</em></p>` : ""}
+        ${fm.thumbnail ? `<img src="${thumbnail}" alt="썸네일" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
+        <div class="post-content">${html}</div>
+      </article>
+    `;
+  }
 
-      const rawThumb = (fm.thumbnail || "").replace(/^\/+|\/+$/g, "");
-      const thumbnail = rawThumb.startsWith("http") ? rawThumb : "/" + rawThumb;
+  function fetchPost(slug) {
+    fetch(`./posts/${slug}.md`)
+      .then(res => {
+        if (!res.ok) throw new Error("❗ 포스트를 찾을 수 없습니다.");
+        return res.text();
+      })
+      .then(renderPost)
+      .catch(err => {
+        console.error("⚠️", err);
+        showError("🚫 해당 포스트를 불러올 수 없습니다. 파일 경로를 다시 확인하세요.");
+      });
+  }
 
-      wrapper.innerHTML = `
-        <article class="blog-post">
-          <h1>${fm.title || slug}</h1>
-          ${fm.date ? `<p><em>${formatDate(fm.date)}</em></p>` : ""}
-          ${fm.thumbnail ? `<img src="${thumbnail}" alt="${fm.title || '썸네일'}" style="max-width:100%;margin:1rem 0;border-radius:8px;" />` : ""}
-          <div class="post-content">${html}</div>
-        </article>
-      `;
-    }
-
-    function fetchPost(slug) {
-      fetch(`./posts/${slug}.md`)
-        .then(res => {
-          if (!res.ok) throw new Error("❗ 포스트를 찾을 수 없습니다.");
-          return res.text();
-        })
-        .then(renderPost)
-        .catch(err => {
-          console.error("⚠️ 에러:", err);
-          showError("🚫 해당 포스트를 불러올 수 없습니다. 파일 경로를 다시 확인하세요.");
-        });
-    }
-
-    if (!slug) {
-      showError("❗ URL에 slug 파라미터가 없습니다.");
-    } else {
-      fetchPost(slug);
-    }
-  </script>
-
-  <!-- ✅ 공통 스크립트 -->
-  <script src="vendor/jQuery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/bootstrap.min.js"></script>
-  <script src="vendor/slick/slick.min.js"></script>
-</body>
-</html>
+  if (!slug) {
+    showError("❗ URL에 slug 파라미터가 없습니다.");
+  } else {
+    fetchPost(slug);
+  }
+</script>
